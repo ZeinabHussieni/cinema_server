@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await axios.get("http://localhost/cinema-project/backend/controllers/get_users.php", {
+      const response = await axios.get("http://localhost/cinema_server/backend/controllers/get_users_byemail.php", {
         params: {
           email: email,
           password: password
@@ -32,8 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.data.user) {
-        alert("Login successful!");
-        localStorage.setItem("userId", response.data.user.id);
+       const user = response.data.user; 
+       const userId = user[0];
+       const email = user[1];
+       const phoneNumber = user[2];
+
+       localStorage.setItem("userId", userId);
+       console.log("Saved userId in localStorage:", userId);
+        
         window.location.href = "http://localhost/cinema_server/frontend/Pages/index.html"; 
       } else {
         alert(response.data.message || "User not found.");

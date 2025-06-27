@@ -5,8 +5,7 @@ html, body {
   width: 100%;
   background-color: #222;
 }
-
-.register-page {
+.profile-page {
   display: flex;
   justify-content: center;  
   align-items: center;     
@@ -40,8 +39,7 @@ html, body {
   justify-content: center;
   align-items: center;
 }
-
-.register-container {
+.profile-container {
   flex: 1 1 25rem;          
   display: flex;
   flex-direction: column;
@@ -54,12 +52,12 @@ html, body {
   font-size: clamp(1rem, 2vw, 1.3rem);
   
 }
-.register-container label {
+.profile-container label {
   margin-top: 1.3em;
   color: white;
   white-space: nowrap;
 }
-.register-container input {
+.profile-container input {
   margin-top: 0.9em;
   margin-bottom: 0.9em;
   padding: 0.8em;
@@ -115,7 +113,7 @@ html, body {
   margin: 1.5em auto 0 auto; 
   white-space: nowrap;
 }
-.register-button {
+.save-button {
   padding: 0.60em 1em;
   border: none;
   border-radius: 8px;
@@ -127,11 +125,11 @@ html, body {
   align-items: center;
   text-align: center;
 }
-.register-button:hover {
+.save-button:hover {
   background-color: #a100a1;
   transform: scale(1.02);
 }
-.loginback-button {
+.index-button {
   background-color: #444;
   color: white;
   padding: 0.6em 1.5em;
@@ -145,20 +143,19 @@ html, body {
   justify-content: center;
 }
 
-.loginback-button:hover {
+.index-button:hover {
   background-color: #666;
   transform: scale(1.02);
 }
 
 
-.button-group .register-button,
-.button-group .loginback-button {
+.button-group .save-button,
+.button-group .index-button {
   flex: 1;
   font-size: 1.2rem;
   min-width: 0; 
   word-break: break-word; 
 }
-
 .circles {
   position: absolute;
   border-radius: 50%;
@@ -214,22 +211,21 @@ html, body {
         transform: translateY(0);
     }
 }
-@media (max-width: 920px) {
+@media (max-width: 1300px) {
   .animation-container {
     display: none;
   }
 }
-
 @media (max-width: 681px) {
   .button-group {
     flex-direction: column;
   }
 
-  .button-group .register-button {
+  .button-group .save-button {
     width: 100%;
     padding: 0.6em 2.9em;
   }
-  .button-group .loginback-button{
+  .button-group .index-button{
     width: 100%;
     padding: 0.6em 0.2em;
   }

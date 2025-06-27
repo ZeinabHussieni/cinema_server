@@ -32,10 +32,3 @@ const dropdown = document.querySelector('.dropdown');
         dropdown.classList.remove('show');
       }
   });
- lottie.loadAnimation({
-  container: document.getElementById('lottie2-player'),
-  renderer: 'svg',
-  loop: true,
-  autoplay: true,
-  path: '../../action.json'  
-});

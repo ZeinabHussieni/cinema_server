@@ -6,6 +6,9 @@ class User extends Model{
     private $phoneNumber;
     private $email;
     private $password;
+    private $favoriteGenres;
+    private $paymentMethod;
+    private $communicationPrefs;
 
     protected static string $table = "users";
     public function __construct(array $data){
@@ -13,6 +16,9 @@ class User extends Model{
         $this->email = $data["email"];
         $this->phoneNumber = $data["phoneNumber"];
         $this->password = $data["password"];
+        $this->favoriteGenres = $data["favoriteGenres"];
+        $this->paymentMethod = $data["paymentMethod"];
+        $this->communicationPrefs = $data["communicationPrefs"];     
     }
     
     public function getId():int{
@@ -27,21 +33,59 @@ class User extends Model{
     public function getPassword(): string{
         return $this->password;
     }
+    public function getFavoriteGenres(): string{
+        return $this->favoriteGenres;
+    }
+    public function getPaymentMethod(): string{
+        return $this->paymentMethod;
+    }
+    public function getCommunicationPrefs(): string{
+        return $this->communicationPrefs;
+    }
     public function setPhoneNumber(string $phoneNumber){
         $this->phoneNumber=$phoneNumber;
     }
     public function setEmail(string $email){
         $this->email=$email;
     }
-        public function setPassword(string $password){
+    public function setPassword(string $password){
         $this->password=$password;
     }
+    public function setFavoriteGenres(string $favoriteGenres){
+        $this->favoriteGenres=$favoriteGenres;
+    }
+    public function setPaymentMethod(string $paymentMethod){
+        $this->paymentMethod=$paymentMethod;
+    }
+    public function setCommunicationPrefs(string $communicationPrefs){
+        $this->communicationPrefs=$communicationPrefs;
+    }
     public function toArray(){
-        return [$this->id, $this->email,$this->phoneNumber];
+        return [$this->id, $this->email,$this->phoneNumber,$this->password,$this->favoriteGenres,$this->paymentMethod,
+                $this->communicationPrefs];
     }
 
-  public static function insertUser(mysqli $mysqli,string $email,string $phoneNumber,string $password):bool {
-    $sql = sprintf("Insert into %s (email,phoneNumber,password) values(?,?,?)", 
+  public static function insertUser(mysqli $mysqli,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
+    $sql = sprintf("Insert into %s (email,phoneNumber,password,favoriteGenres,paymentMethod,communicationPrefs) values(?,?,?,?,?,?)", 
+                   static::$table);
+                   
+    $query=$mysqli->prepare($sql);
+
+    if(!$query) {
+    error_log("Prepare failed: " . $mysqli->error); 
+    return false;
+     }
+    $hashed=password_hash($password,PASSWORD_DEFAULT);
+    $query->bind_param("ssssss",$email,$phoneNumber,$hashed,$favoriteGenres,$paymentMethod,$communicationPrefs);
+    $executed = $query->execute();
+    if (!$executed) {
+        error_log("Execute failed: " . $query->error);
+        return false;
+    }
+    return true;  
+ }
+  public static function updateUser(mysqli $mysqli,int $id,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
+    $sql = sprintf("update %s SET email = ? ,phoneNumber =?, password=?, favoriteGenres=?,paymentMethod=?,communicationPrefs=? where id=?", 
                    static::$table);
                    
     $query=$mysqli->prepare($sql);
@@ -50,9 +94,8 @@ class User extends Model{
 
     $hashed=password_hash($password,PASSWORD_DEFAULT);
 
-    $query->bind_param("sss",$email,$phoneNumber,$hashed);
+    $query->bind_param("ssssssi",$email,$phoneNumber,$hashed,$favoriteGenres,$paymentMethod,$communicationPrefs,$id);
    return $query->execute();
    
  }
-
 }

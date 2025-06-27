@@ -10,7 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.getElementById("email");
   const phoneNumberInput = document.getElementById("PhoneNumber"); 
   const passwordInput = document.getElementById("password"); 
+  const favoriteGenresInput=document.getElementById("favoriteGenres");
+  const paymentMethodInput=document.getElementById("paymentMethod");
+  const communicationPrefsInput=document.getElementById("communicationPrefs");
   const registerbutton = document.querySelector(".register-button");
+  
 
   registerbutton.addEventListener("click", async (e) => {
     e.preventDefault(); 
@@ -18,8 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = emailInput.value.trim();
     const phoneNumber = phoneNumberInput.value.trim();
     const password = passwordInput.value;
-
-    if (email === "" || password === "" || phoneNumber === "") {
+    const favoriteGenres = favoriteGenresInput.value.trim();
+    const paymentMethod = paymentMethodInput.value.trim();
+    const communicationPrefs = communicationPrefsInput.value.trim();
+    if (email === "" || password === "" || phoneNumber === ""||favoriteGenres===""||paymentMethod===""||communicationPrefs=="") {
       alert("Please enter email, phone number, and password.");
       return;
     }
@@ -29,10 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("email", email);
       formData.append("phoneNumber", phoneNumber);
       formData.append("password", password);
+      formData.append("favoriteGenres", favoriteGenres);
+      formData.append("paymentMethod", paymentMethod);
+      formData.append("communicationPrefs", communicationPrefs);
+      const response = await axios.post("http://localhost/cinema_server/backend/controllers/register_user.php", formData);
+console.log(response.data);
 
-      const response = await axios.post("http://localhost/cinema_server/backend/controllers/get_users.php", formData);
-
-      if (response.data.status === 200) {
+     if (response.data.status == 200 || response.data.status === "200")
+{
         alert("Register successful");
         window.location.href = "../Pages/index.html";
       } else {
