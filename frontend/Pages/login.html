@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+  <link rel="stylesheet" href="../styles/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <title>
+            login page
+        </title>
+    </head>
+    <body>
+        <div class='login-page'>
+            <div class='circles circle1'></div>
+            <div class='circles circle2'></div>
+            <div class='circles circle3'></div>
+            <div class="box-wrapper">
+            <div class="container">
+                <div id="lottie-player" class="animation-container"></div>
+                <div class="login-container">
+                    <h2 class="animated-heading">Login</h2>
+                     <form>
+                        <div class="form-group">
+                            <i class="fas fa-user"></i>
+                            <label for="email">Email:</label>
+                            <input id="email" type="text" placeholder="me@gmail.com" required class='input'/>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-lock"></i>
+                            <label for="password">Password:</label>
+                            <input id="password" type="password" placeholder="Please Enter Your Password" required class='input' autocomplete="current-password" />
+                        </div>
+                
+                        <button class="login-button">Login</button>
+                     </form>
+                      <div class="register-link">
+                      <p>Don't have an account? <a href="register.html">Register here</a></p>
+                      </div>
+
+                </div>
+            </div>
+            </div>
+                     
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+        <script src="../scripts/login.js"></script>
+    </body>
+</html>

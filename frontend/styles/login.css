@@ -1,0 +1,138 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+.login-page {
+  display: flex;
+  justify-content: center;  
+  align-items: center;     
+  height: 100vh;            
+  background-color: #222;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.box-wrapper {
+  border: 0.125rem  solid purple;
+  border-radius: 1.25rem;
+  padding: 2em;
+  max-width: 1000px;
+  height: 31.25rem;           
+  width: 90%;              
+  box-shadow: 0 0 15px rgba(128, 0, 128, 0.4);
+  background-color: #1a1a1a; 
+  display: flex;            
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.login-container {
+  flex: 1 1 25rem;          
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 31.25rem;
+  min-width: 17.5rem;
+  color: white;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  
+}
+.login-container label {
+  margin-top: 1.3em;
+  color: white;
+}
+.login-container input {
+  margin-top: 0.9em;
+  margin-bottom: 0.9em;
+  padding: 0.8em;
+  font-size: 1rem;
+  width: 100%; 
+  border: none;
+  border-radius: 6px;
+  box-sizing: border-box;
+  background-color: #333;
+  color: white;
+}
+.login-button {
+  width: 20%; 
+  padding: 0.60em 2.5em;
+  font-size: 1.3rem;
+  border: none;
+  border-radius: 8px;
+  background-color: purple;
+  color: white;
+  margin-top: 1.5em;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.login-button:hover {
+  background-color: #a100a1;
+  transform: scale(1.02);
+}
+.circles {
+  position: absolute;
+  border-radius: 50%;
+  background: purple;
+  filter: blur(90px);
+  opacity: 0.4;
+  z-index: 0; 
+  animation: float 10s ease-in-out infinite alternate;
+}
+.circle1 {
+  width: 140px;
+  height: 190px;
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.circle2 {
+  width: 210px;
+  height: 210px;
+  top: 20%;
+  left: 80%;
+  animation-delay: 2s;
+}
+.circle3 {
+  width: 130px;
+  height: 130px;
+  top: 70%;
+  left: 50%;
+  animation-delay: 4s;
+}
+.animation-container {
+  flex: 1 1 400px;
+  max-width: 500px;
+  height: 500px; 
+  margin: 0 auto;
+  position: relative;
+  z-index: 1; 
+}
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+@media (max-width: 680px) {
+  .animation-container {
+    display: none;
+  }
+}

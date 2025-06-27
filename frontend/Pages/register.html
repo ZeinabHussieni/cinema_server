@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+  <link rel="stylesheet" href="../styles/register.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <title>
+            Register page
+        </title>
+    </head>
+    <body>
+        <div class='register-page'>
+            <div class='circles circle1'></div>
+            <div class='circles circle2'></div>
+            <div class='circles circle3'></div>
+            <div class="box-wrapper">
+            <div class="container">
+                <div id="lottie-player" class="animation-container"></div>
+                <div class="register-container">
+                    <h2 class="animated-heading">Register</h2>
+                     <form>
+                        <div class="form-group">
+                            <i class="fas fa-user"></i>
+                            <label for="email">Email:</label>
+                            <input id="email" type="text" placeholder="me@gmail.com" required class='input'/>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-phone"></i>
+                            <label for="PhoneNumber">Phone Number:</label>
+                            <input id="PhoneNumber" type="tel" placeholder="e.g. +961 70 123 456" pattern="^\+?[0-9\s\-]{7,15}$" required class='input' />
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-lock"></i>
+                            <label for="password">Password:</label>
+                            <input id="password" type="password" placeholder="Please Enter Your Password" required class='input' autocomplete="current-password"/>
+                        </div>
+                
+                        <div class="button-group">
+                           <a href="login.html" class="loginback-button">Go back</a>
+                           <button class="register-button">Register</button>
+                        </div>
+
+                    </form>
+                    
+                </div>
+            </div>
+            </div>
+                     
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+        <script src="../scripts/register.js"></script>
+    </body>
+</html>
