@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <img src="${movie.poster_url}" alt="${movie.title}" />
           <h3>${movie.title.toUpperCase()}</h3>
           <div class="rating">${ratingStars}</div>
-          <a href="./frontend/Pages/Description.html?id=${movie.id}">Learn More</a>
+          <a href="./description.html?id=${movie.id}">Learn More</a>
         </div>
       `;
       if (movie.status === "Current") {
@@ -68,9 +68,8 @@ function generateStars(rating) {
   rating = Number(rating);
   if (isNaN(rating) || rating < 0) rating = 0;
   if (rating > 5) rating = 5;
-
-  const fullStars = Math.floor(rating);
-  const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+  const fullStars = Math.floor(rating);//we use it to see how many we have full stars
+  const halfStar = rating % 1 >= 0.5 ? 1 : 0;//check if the decimal part of the star is near to half star 
   const emptyStars = 5 - fullStars - halfStar;
 
   let starsHTML = "";
