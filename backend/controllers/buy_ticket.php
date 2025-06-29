@@ -28,7 +28,6 @@ if (!Ticket::canBuyTickets($mysqli, $userId, $movieId, count($seatNumbers))) {
     exit;
 }
 $ticketPrice = Showtime::getPrice($mysqli, $showtimeId);
-
 // buy ticket
 $purchaseSuccess = Ticket::BuyTickets($mysqli, $userId, $showtimeId, $seatNumbers, $ticketPrice);
 

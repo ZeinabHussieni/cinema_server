@@ -7,7 +7,6 @@ if (!isset($_GET['movie_id'])) {
     echo json_encode(["error" => "movie_id parameter is required"]);
     exit;
 }
-
 $movieId = (int)$_GET['movie_id'];
 
 $showtimes = Showtime::getshowtimeId($mysqli, $movieId);

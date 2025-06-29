@@ -6,4 +6,5 @@ $query =" ALTER TABLE tickets
   ADD COLUMN price DECIMAL(6,2) NOT NULL";
 $execute = $mysqli->prepare($query);
 $execute->execute();
+
 ?>

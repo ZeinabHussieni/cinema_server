@@ -25,7 +25,6 @@ class Showtime extends Model {
     public function getMovie_id(): int {
         return $this->movie_id;
     }
-
     public function getShow_datetime(): string {
         return $this->show_datetime;
     }

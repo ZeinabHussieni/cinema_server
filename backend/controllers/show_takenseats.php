@@ -7,7 +7,7 @@ if (!$showtimeId) {
     exit;
 }
 
-$sql = "SELECT seat_number FROM tickets WHERE showtime_id = ?";
+$sql = "Select seat_number FROM tickets WHERE showtime_id = ?";
 $stmt = $mysqli->prepare($sql);
 $stmt->bind_param("i", $showtimeId);
 $stmt->execute();
@@ -17,6 +17,5 @@ $takenSeats = [];
 while ($row = $res->fetch_assoc()) {
     $takenSeats[] = (int)$row['seat_number'];
 }
-
 echo json_encode(['takenSeats' => $takenSeats]);
 ?>

@@ -14,7 +14,6 @@ class Trailer extends Model{
         $this->trailer_url = $data["trailer_url"];
 
     }
-    
     public function getId():int{
         return $this->id;
     }

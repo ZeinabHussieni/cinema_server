@@ -68,8 +68,7 @@ class Ticket extends Model{
         return [$this->id, $this->user_id,$this->showtime_id,$this->quantity,$this->seat_number,$this->purchase_date,$this->price,
             $this->payment_status];}
 
-
-public static function BuyTickets(mysqli $mysqli, int $userId, int $showtimeId, array $seatNumbers, float $ticketPrice): bool {
+    public static function BuyTickets(mysqli $mysqli, int $userId, int $showtimeId, array $seatNumbers, float $ticketPrice): bool {
     // get taken seats
     $sql = "Select seat_number FROM tickets WHERE showtime_id = ?";
     $stmt = $mysqli->prepare($sql);

@@ -133,8 +133,7 @@ function renderSeats(takenSeats, capacity) {
           selectedSeatsArray.push(seatNum);
           seat.setAttribute("aria-pressed", "true");
         }
-        // Calculate total price
-
+        // calc total price
         const total = selectedSeatsArray.length * ticketPrice;
         document.getElementById("totalPrice").textContent = `Total Price: $${total.toFixed(2)}`;
 
@@ -147,7 +146,6 @@ function renderSeats(takenSeats, capacity) {
       seat.setAttribute("aria-pressed", "false");
       seat.setAttribute("role", "button");
     }
-
     seatsGrid.appendChild(seat);
   }
 }

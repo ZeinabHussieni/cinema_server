@@ -4,7 +4,6 @@ require("../connection/connection.php");
 
 $response = [];
 
-
 if(isset($_GET["id"])){
  $id =$_GET["id"];
  $user = User::find($mysqli, $id);
