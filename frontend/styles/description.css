@@ -22,10 +22,10 @@ html, body {
 .box-wrapper {
   border: 0.125rem  solid purple;
   border-radius: 1.25rem;
-  padding: 1em;
-  max-width: 1000px; 
-  max-height: 850px;  
-  width: 90%;              
+  padding: 0.4em;
+  max-width: 2000px; 
+  max-height: 940px;  
+  width: 100%;              
   box-shadow: 0 0 15px rgba(128, 0, 128, 0.4);
   background-color: #1a1a1a; 
   display: flex;            
@@ -39,10 +39,11 @@ html, body {
   flex: 1 1 25rem;          
   display: flex;
   flex-direction: column;
-  padding: 2em;
+  padding: 6em;
+  padding-top:20em;
   border-radius: 10px;
   width: 100%;
-  max-width: 31.25rem;
+  max-width: 36.25rem;
   min-width: 17.5rem;
   color: white;
   font-size: clamp(1rem, 2vw, 1.3rem);
@@ -55,15 +56,15 @@ html, body {
   color: white;
 }
 img {
-  flex: 1 1 auto;       
-  max-width: 60%;    
-  height: auto;        
-  margin: 0 auto;
+  max-width: 45%;      
+  height: auto;         
+  margin: 0;             
   position: relative;
   z-index: 1;
-  border-radius: 10px;  
-  object-fit: contain;  
+  border-radius: 10px;
+  padding-top: 3em;
 }
+
 
 .movie-details p {
   margin: 0.6em 0;
@@ -93,6 +94,7 @@ img {
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(255, 182, 193, 0.5); 
+  
 }
 
 .video-wrapper iframe {
@@ -161,7 +163,7 @@ img {
   position: absolute;
   border-radius: 50%;
   background: purple;
-  filter: blur(90px);
+  filter: blur(50px);
   opacity: 0.4;
   z-index: 0; 
   animation: float 10s ease-in-out infinite alternate;
@@ -187,6 +189,46 @@ img {
   left: 50%;
   animation-delay: 4s;
 }
+.circle4 {
+  width: 210px;
+  height: 210px;
+  top: 30%;
+  left: 90%;
+  animation-delay: 2s;
+}
+.circle5 {
+  width: 130px;
+  height: 130px;
+  top: 10%;
+  left: 30%;
+  animation-delay: 4s;
+}
+.drop {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 1rem;
+}
+.drop label {
+  white-space: nowrap;
+  font-weight: 600;
+  color: white;
+}
+.drop select.input {
+  flex: 1; 
+  padding: 0.7em 1em;
+  border-radius: 6px;
+  border: none;
+  background-color: #4f4f4f;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.drop select.input:hover,
+.drop select.input:focus {
+  background-color: purple;
+}
 @keyframes float {
     0% {
         transform: translateY(0);
@@ -204,3 +246,33 @@ img {
   }
 }
 
+.seats-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 40px); /* 10 seats per row */
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  background-color: #4f4f4f;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.seat.taken {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background-color: purple;
+}

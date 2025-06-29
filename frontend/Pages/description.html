@@ -13,6 +13,9 @@
             <div class='circles circle1'></div>
             <div class='circles circle2'></div>
             <div class='circles circle3'></div>
+            <div class='circles circle4'></div>
+            <div class='circles circle5'></div>
+       
             <div class="box-wrapper">
             <div class="container">
             <img src="https://image.tmdb.org/t/p/original/czembW0Rk1Ke7lCJGahbOhdCuhV.jpg" alt="barbie" class="poster_url">
@@ -23,7 +26,14 @@
             <div class="video-wrapper">
             <iframe src="" allowfullscreen></iframe>
             </div>
-
+            <div class="drop">
+           <label for="showtimeSelect">Choose Showtime:</label>
+           <select id="showtimeSelect" name="showtime" class="input" autocomplete="off"></select>
+            </div>
+            <div class="seat-picker">
+            <h3>Choose your seats:</h3>
+            <div class="seats-grid"></div>
+            </div>
       <div class="button-group">
         <a href="index.html" class="index-button">Go back</a>
         <button class="ticket-button">ticket</button>
@@ -31,6 +41,6 @@
    </div>
          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
          <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
-                 <script src="../scripts/description.js"></script>
+         <script src="../scripts/description.js"></script>
  </body>
 </html>

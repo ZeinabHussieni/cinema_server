@@ -182,7 +182,10 @@ html, body {
 .card a:hover {
   color: rgb(173, 16, 173);
 }
-
+.animationupcoming-container{
+    width: 150px;
+    height: 150px;
+}
 @media (max-width: 768px) {
   .section-title {
     flex-direction: column;
@@ -206,10 +209,7 @@ html, body {
     height: 80px;
   }
 }
-.animationupcoming-container{
-    width: 150px;
-    height: 150px;
-}
+
 @media (max-width: 480px) {
   .card {
     min-width: 180px;
