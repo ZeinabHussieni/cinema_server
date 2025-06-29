@@ -39,10 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("paymentMethod", paymentMethod);
       formData.append("communicationPrefs", communicationPrefs);
       const response = await axios.post("http://localhost/cinema_server/backend/controllers/register_user.php", formData);
-console.log(response.data);
+      console.log(response.data);
 
-     if (response.data.status == 200 || response.data.status === "200")
-{
+       if (response.data.status == 200 || response.data.status === "200")
+      {
         alert("Register successful");
         window.location.href = "../Pages/index.html";
       } else {

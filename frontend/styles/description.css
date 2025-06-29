@@ -23,7 +23,10 @@ html, body {
   border: 0.125rem  solid purple;
   border-radius: 1.25rem;
   padding: 0.4em;
-  width: 100%;              
+  width: 100%;  
+  max-height: 90vh;     
+  height: auto;                
+  min-height: fit-content;        
   box-shadow: 0 0 15px rgba(128, 0, 128, 0.4);
   background-color: #1a1a1a; 
   display: flex;            
@@ -40,8 +43,6 @@ html, body {
   padding: 40em 6em 6em;
   border-radius: 10px;
   width: 100%;
-  max-width: 45.25rem;
-  min-width: 25.5rem;
   color: white;
   font-size: clamp(1rem, 2vw, 1.3rem);
   

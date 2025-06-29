@@ -85,10 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("communicationPrefs", communicationPrefs);
       const response = await axios.post("http://localhost/cinema_server/backend/controllers/update_users.php", formData);
 
-console.log(response.data);
+    console.log(response.data);
 
      if (response.data.status == 200 || response.data.status === "200")
-{
+    {
         alert("Changed successful");
         window.location.href = "../Pages/index.html";
       } else {

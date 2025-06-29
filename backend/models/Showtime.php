@@ -2,12 +2,12 @@
 require_once("Model.php");
 
 class Showtime extends Model {
-    private int $id;
-    private int $movie_id;
-    private string $show_datetime;  
-    private int $capacity;
-    private string $created_at;
-    private float $ticket_price;
+    private $id;
+    private $movie_id;
+    private $show_datetime;  
+    private  $capacity;
+    private $created_at;
+    private $ticket_price;
     protected static string $table = "showtimes";
     public function __construct(array $data) {
         $this->id = $data["id"];

@@ -46,8 +46,6 @@ html, body {
   padding: 2em;
   border-radius: 10px;
   width: 100%;
-  max-width: 31.25rem;
-  min-width: 17.5rem;
   color: white;
   font-size: clamp(1rem, 2vw, 1.3rem);
   

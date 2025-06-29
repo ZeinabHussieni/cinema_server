@@ -131,4 +131,22 @@ class Ticket extends Model{
         }
         return true;
     }
+
+  public static function getUsertickets(mysqli $mysqli, int $userId): array {
+    $sql = "Select t.id AS ticket_id,t.seat_number,t.showtime_id,t.quantity,s.show_datetime,
+            m.title AS movie_title,m.id AS movie_id FROM tickets t JOIN showtimes s ON t.showtime_id = s.id JOIN movies m ON s.movie_id = m.id
+            WHERE t.user_id = ?";
+    
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $tickets = [];
+    while ($row = $result->fetch_assoc()) {
+        $tickets[] = $row;
+    }
+    return $tickets;
+}
+
 }      

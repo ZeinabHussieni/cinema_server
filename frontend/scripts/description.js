@@ -45,7 +45,6 @@ if (movieId) {
 } else {
   alert("No movie ID provided in the URL");
 }
-
 //get showtime id
 let selectedShowtimeId = null;
 let selectedSeatsArray = [];
