@@ -1,20 +1,20 @@
-const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);//grabs everything in the info after th '?' in the url
 const movieId = urlParams.get('id');
 
 if (movieId) {
   axios.get("http://localhost/cinema_server/backend/controllers/get_movies.php", {
     params: { id: movieId }
   }).then(response => {
-    const data = response.data;
+    const data = response.data; 
     if (data.movie) {
       const movie = data.movie;
       const [actorName, roleName] = movie.movie_cast && movie.movie_cast.includes('as')
       ? movie.movie_cast.split('as')
       : ["Unknown", "Unknown"];
 
-      //here to update the content in the page
+      //we put the title of movie
       document.querySelector('.heading').textContent = movie.title;
-
+      //and other movie details
       document.querySelector('.movie-details').innerHTML = `
         <p><strong>Description:</strong> ${movie.description}</p>
         <p><strong>Actor Name:</strong> ${actorName}</p>
@@ -45,38 +45,32 @@ if (movieId) {
 }
 
 //get showtime id
-
-
 let selectedShowtimeId = null;
 let selectedSeatsArray = [];
 
 if (movieId) {
-  // Fetch movie details here...
-
-  // Fetch showtimes for movie
+  // get the showtimes for movie
   axios.get("http://localhost/cinema_server/backend/controllers/get_showtimeId.php", {
     params: { movie_id: movieId }
   }).then(res => {
-    const showtimes = res.data.showtimes;
-
+    const showtimes = res.data.showtimes;//asgin results of showtime
     if (showtimes.length === 0) {
       alert("No showtimes available");
       return;
     }
-
-    const select = document.getElementById("showtimeSelect");
+    //we do this method to asgin all showtimes to a dropdown
+    const select=document.getElementById("showtimeSelect");
     select.innerHTML = "";
-
-    showtimes.forEach(showtime => {
+     showtimes.forEach(showtime => {
       const option = document.createElement("option");
       option.value = showtime.id;
       option.textContent = new Date(showtime.show_datetime).toLocaleString();
       select.appendChild(option);
     });
-
+    //for any selected time seats taken are shown
     selectedShowtimeId = select.value;
     loadTakenSeats(selectedShowtimeId);
-
+    //update showtimeid and seats when select another option
     select.addEventListener("change", (e) => {
       selectedShowtimeId = e.target.value;
       selectedSeatsArray = [];
@@ -90,6 +84,7 @@ if (movieId) {
 } else {
   alert("No movie ID provided in the URL");
 }
+//oas through all seats to asgin taken and not taken
 function renderSeats(takenSeats) {
   const seatsGrid = document.getElementById("seats-grid");
   seatsGrid.innerHTML = "";
@@ -97,7 +92,7 @@ function renderSeats(takenSeats) {
   const ROWS = 5;
   const COLS = 10;
   const totalSeats = ROWS * COLS;
-
+ //create the seats table
   for (let seatNum = 1; seatNum <= totalSeats; seatNum++) {
     const seat = document.createElement("button");
     seat.classList.add("seat");
@@ -161,7 +156,7 @@ document.querySelector('.ticket-button').addEventListener('click', () => {
   }).then(res => {
     if (res.data.success) {
       alert("Ticket purchased successfully");
-      // Optionally clear selections or reload seats here
+       loadTakenSeats(selectedShowtimeId);
     } else {
       alert(res.data.message || "Purchase failed");
     }

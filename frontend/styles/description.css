@@ -65,7 +65,6 @@ img {
   padding-top: 3em;
 }
 
-
 .movie-details p {
   margin: 0.6em 0;
   color: #ddd;
@@ -229,6 +228,37 @@ img {
 .drop select.input:focus {
   background-color: purple;
 }
+/* asgin it to id because I used it in js getelementbyid*/
+#seats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); /*fit its place will having max 30px size */
+  gap: 8px;
+  margin-top: 10px;
+}
+.seat {
+  aspect-ratio: 1 / 1; /* ensures square shape */
+  background-color: #4f4f4f;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+  min-width: 30px;
+}
+.seat.taken {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background-color: purple;
+}
+
 @keyframes float {
     0% {
         transform: translateY(0);
@@ -244,35 +274,4 @@ img {
   img {
     display: none;
   }
-}
-
-.seats-grid {
-  display: grid;
-  grid-template-columns: repeat(10, 40px); /* 10 seats per row */
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.seat {
-  width: 40px;
-  height: 40px;
-  background-color: #4f4f4f;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.seat.taken {
-  background-color: red;
-  cursor: not-allowed;
-}
-
-.seat.selected {
-  background-color: purple;
 }

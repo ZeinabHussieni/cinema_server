@@ -27,18 +27,19 @@
             <iframe src="" allowfullscreen></iframe>
             </div>
             <div class="drop">
-           <label for="showtimeSelect">Choose Showtime:</label>
-           <select id="showtimeSelect" name="showtime" class="input" autocomplete="off"></select>
+            <label for="showtimeSelect">Choose Showtime:</label>
+            <select id="showtimeSelect" class="input"></select>
             </div>
             <div class="seat-picker">
             <h3>Choose your seats:</h3>
-            <div class="seats-grid"></div>
+            <div id="seats-grid"></div>
             </div>
-      <div class="button-group">
-        <a href="index.html" class="index-button">Go back</a>
-        <button class="ticket-button">ticket</button>
+
+            <div class="button-group">
+            <a href="index.html" class="index-button">Go back</a>
+            <button class="ticket-button">ticket</button>
+            </div>
        </div>
-   </div>
          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
          <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
          <script src="../scripts/description.js"></script>
