@@ -17,14 +17,12 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 .box-wrapper {
   border: 0.125rem  solid purple;
   border-radius: 1.25rem;
   padding: 0.4em;
-  max-width: 2000px; 
-  max-height: 940px;  
   width: 100%;              
   box-shadow: 0 0 15px rgba(128, 0, 128, 0.4);
   background-color: #1a1a1a; 
@@ -39,12 +37,11 @@ html, body {
   flex: 1 1 25rem;          
   display: flex;
   flex-direction: column;
-  padding: 6em;
-  padding-top:20em;
+  padding: 40em 6em 6em;
   border-radius: 10px;
   width: 100%;
-  max-width: 36.25rem;
-  min-width: 17.5rem;
+  max-width: 45.25rem;
+  min-width: 25.5rem;
   color: white;
   font-size: clamp(1rem, 2vw, 1.3rem);
   
@@ -58,11 +55,11 @@ html, body {
 img {
   max-width: 45%;      
   height: auto;         
-  margin: 0;             
+  padding-top: 7em; 
+  margin-left: 0;   
   position: relative;
   z-index: 1;
   border-radius: 10px;
-  padding-top: 3em;
 }
 
 .movie-details p {
@@ -75,7 +72,6 @@ img {
   padding-left: 1.5em;
 }
 .trailer-section {
-  margin-top: 2rem;
   text-align: center;
   color: white;
 }
@@ -88,7 +84,7 @@ img {
 
 .video-wrapper {
   position: relative;
-  padding-bottom: 56.25%; 
+  padding-bottom: 60.25%; 
   height: 0;
   overflow: hidden;
   border-radius: 10px;
@@ -158,6 +154,7 @@ img {
   min-width: 0; 
   word-break: break-word; 
 }
+
 .circles {
   position: absolute;
   border-radius: 50%;
@@ -228,8 +225,7 @@ img {
 .drop select.input:focus {
   background-color: purple;
 }
-/* asgin it to id because I used it in js getelementbyid*/
-#seats-grid {
+.seats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); /*fit its place will having max 30px size */
   gap: 8px;
@@ -258,6 +254,18 @@ img {
 .seat.selected {
   background-color: purple;
 }
+.totalPrice {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #000000;
+    background: #fffbfd53;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(255, 64, 129, 0.2);
+    width: fit-content;
+    margin: 15px auto;
+    text-align: center;
+  }
 
 @keyframes float {
     0% {
@@ -270,7 +278,7 @@ img {
         transform: translateY(0);
     }
 }
-@media (max-width: 700px) {
+@media (max-width: 860px) {
   img {
     display: none;
   }

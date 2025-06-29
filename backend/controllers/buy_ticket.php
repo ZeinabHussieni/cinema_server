@@ -1,6 +1,7 @@
 <?php
 require("../connection/connection.php");
 require_once("../models/Ticket.php");
+require_once("../models/Showtime.php");
 
 // to take the json body from axios
 $data = json_decode(file_get_contents("php://input"), true);
@@ -26,9 +27,10 @@ if (!Ticket::canBuyTickets($mysqli, $userId, $movieId, count($seatNumbers))) {
     ]);
     exit;
 }
+$ticketPrice = Showtime::getPrice($mysqli, $showtimeId);
 
 // buy ticket
-$purchaseSuccess = Ticket::BuyTickets($mysqli, $userId, $showtimeId, $seatNumbers);
+$purchaseSuccess = Ticket::BuyTickets($mysqli, $userId, $showtimeId, $seatNumbers, $ticketPrice);
 
 if ($purchaseSuccess) {
     echo json_encode([

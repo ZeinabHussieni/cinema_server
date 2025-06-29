@@ -19,7 +19,9 @@ if (movieId) {
         <p><strong>Description:</strong> ${movie.description}</p>
         <p><strong>Actor Name:</strong> ${actorName}</p>
         <p><strong>Actor Role:</strong> ${roleName}</p>
-        <p><strong>Rating:</strong> ${movie.ratings || "Not rated"}</p>
+        <p><strong>Rating:</strong> 
+        ${movie.ratings ? `${generateStars(movie.ratings)}` : "Not rated"}
+        </p>
         <p><strong>Status:</strong> ${movie.status}</p>
         <p><strong>Release Date:</strong> ${movie.release_date}</p>`;
 
@@ -47,13 +49,16 @@ if (movieId) {
 //get showtime id
 let selectedShowtimeId = null;
 let selectedSeatsArray = [];
+let ticketPrice = 0;
 
 if (movieId) {
   // get the showtimes for movie
   axios.get("http://localhost/cinema_server/backend/controllers/get_showtimeId.php", {
     params: { movie_id: movieId }
   }).then(res => {
-    const showtimes = res.data.showtimes;//asgin results of showtime
+
+      const showtimes = res.data.showtimes;
+  console.log(showtimes); // debug check
     if (showtimes.length === 0) {
       alert("No showtimes available");
       return;
@@ -61,22 +66,35 @@ if (movieId) {
     //we do this method to asgin all showtimes to a dropdown
     const select=document.getElementById("showtimeSelect");
     select.innerHTML = "";
-     showtimes.forEach(showtime => {
-      const option = document.createElement("option");
-      option.value = showtime.id;
-      option.textContent = new Date(showtime.show_datetime).toLocaleString();
-      select.appendChild(option);
-    });
-    //for any selected time seats taken are shown
-    selectedShowtimeId = select.value;
-    loadTakenSeats(selectedShowtimeId);
-    //update showtimeid and seats when select another option
-    select.addEventListener("change", (e) => {
-      selectedShowtimeId = e.target.value;
-      selectedSeatsArray = [];
-      loadTakenSeats(selectedShowtimeId);
-    });
+   // After this part where you append all options:
+   showtimes.forEach(showtime => {
+   const option = document.createElement("option");
+   option.value = showtime.id;
+   option.textContent = new Date(showtime.show_datetime).toLocaleString();
+   option.dataset.capacity = showtime.capacity;
+   option.dataset.ticket_price = showtime.ticket_price;
+   select.appendChild(option);
+   console.log("Option ticket price:", option.dataset.ticket_price, typeof option.dataset.ticket_price);
+});
+ const initialOption = select.options[select.selectedIndex];
+ ticketPrice = initialOption ? Number(initialOption.dataset.ticket_price) : 0;
+ console.log("Initial ticketPrice set to:", ticketPrice);
 
+ // continue loading seats and stuff
+ selectedShowtimeId = select.value;
+ loadTakenSeats(selectedShowtimeId);
+ select.addEventListener("change", (e) => {
+ selectedShowtimeId = select.value;
+
+ const initialSelectedOption = select.querySelector(`option[value="${selectedShowtimeId}"]`);
+ ticketPrice = initialSelectedOption ? Number(initialSelectedOption.dataset.ticket_price) : 0;
+ console.log("Initial ticketPrice:", ticketPrice);
+
+ loadTakenSeats(selectedShowtimeId);
+
+  document.getElementById("totalPrice").textContent = `Total Price: $0.00`;
+  loadTakenSeats(selectedShowtimeId);
+});
   }).catch(err => {
     console.error("Error loading showtimes:", err);
   });
@@ -84,16 +102,16 @@ if (movieId) {
 } else {
   alert("No movie ID provided in the URL");
 }
-//oas through all seats to asgin taken and not taken
-function renderSeats(takenSeats) {
+//create table of seats
+function renderSeats(takenSeats, capacity) {
   const seatsGrid = document.getElementById("seats-grid");
   seatsGrid.innerHTML = "";
-
-  const ROWS = 5;
   const COLS = 10;
-  const totalSeats = ROWS * COLS;
- //create the seats table
-  for (let seatNum = 1; seatNum <= totalSeats; seatNum++) {
+  const seatsToRender = capacity;
+  const ROWS = Math.ceil(seatsToRender / COLS);
+
+
+  for (let seatNum = 1; seatNum <= seatsToRender; seatNum++) {
     const seat = document.createElement("button");
     seat.classList.add("seat");
     seat.textContent = seatNum;
@@ -101,7 +119,7 @@ function renderSeats(takenSeats) {
     if (takenSeats.includes(seatNum)) {
       seat.classList.add("taken");
       seat.setAttribute("aria-label", `Seat ${seatNum}, taken`);
-      seat.disabled = true; // disable taken seats so user can't click
+      seat.disabled = true;
     } else {
       seat.setAttribute("aria-label", `Seat ${seatNum}, available`);
 
@@ -115,10 +133,18 @@ function renderSeats(takenSeats) {
           selectedSeatsArray.push(seatNum);
           seat.setAttribute("aria-pressed", "true");
         }
+        // Calculate total price
+
+        const total = selectedSeatsArray.length * ticketPrice;
+        document.getElementById("totalPrice").textContent = `Total Price: $${total.toFixed(2)}`;
+
+        console.log("Ticket price:", ticketPrice);
+
+       console.log("Selected seats:", selectedSeatsArray);
         console.log("Selected seats:", selectedSeatsArray);
       });
 
-      seat.setAttribute("aria-pressed", "false"); // track toggle state for screen readers
+      seat.setAttribute("aria-pressed", "false");
       seat.setAttribute("role", "button");
     }
 
@@ -126,14 +152,22 @@ function renderSeats(takenSeats) {
   }
 }
 
-
 function loadTakenSeats(showtimeId) {
+  const select = document.getElementById("showtimeSelect");
+  const selectedOption = select.querySelector(`option[value="${showtimeId}"]`);
+  const capacity = selectedOption && !isNaN(selectedOption.dataset.capacity)
+    ? Number(selectedOption.dataset.capacity)
+    : 50; // fallback capacity
+console.log(`Using capacity ${capacity} for showtime ${showtimeId}`);
+
   axios.get("http://localhost/cinema_server/backend/controllers/show_takenseats.php", {
     params: { showtime_id: showtimeId }
-  }).then(res => {
+  })
+  .then(res => {
     const takenSeats = res.data.takenSeats || [];
-    renderSeats(takenSeats);
-  }).catch(err => {
+    renderSeats(takenSeats, capacity);
+  })
+  .catch(err => {
     console.error("Failed to load taken seats", err);
   });
 }
@@ -146,17 +180,16 @@ document.querySelector('.ticket-button').addEventListener('click', () => {
     alert("Missing user, showtime info or no seats selected!");
     return;
   }
-
-  axios.post("http://localhost/cinema_server/backend/controllers/buy_ticket.php", {
-    user_id: userId,
-    movie_id: movieId,
-    showtime_id: selectedShowtimeId,
-    seat_numbers: selectedSeatsArray,
-    quantity: quantity
-  }).then(res => {
+axios.post("http://localhost/cinema_server/backend/controllers/buy_ticket.php", {
+  user_id: userId,
+  movie_id: movieId,
+  showtime_id: selectedShowtimeId,
+  seat_numbers: selectedSeatsArray,
+  quantity: selectedSeatsArray.length,
+}).then(res => {
     if (res.data.success) {
       alert("Ticket purchased successfully");
-       loadTakenSeats(selectedShowtimeId);
+      loadTakenSeats(selectedShowtimeId);
     } else {
       alert(res.data.message || "Purchase failed");
     }
@@ -165,3 +198,25 @@ document.querySelector('.ticket-button').addEventListener('click', () => {
     alert("Something went wrong");
   });
 });
+function generateStars(rating) {
+  rating = Number(rating);
+  if (isNaN(rating) || rating < 0) rating = 0;
+  if (rating > 5) rating = 5;
+  const fullStars = Math.floor(rating);//we use it to see how many we have full stars
+  const halfStar = rating % 1 >= 0.5 ? 1 : 0;//check if the decimal part of the star is near to half star 
+  const emptyStars = 5 - fullStars - halfStar;
+
+  let starsHTML = "";
+
+  for (let i = 0; i < fullStars; i++) {
+    starsHTML += `<i class="fas fa-star"></i>`;
+  }
+  if (halfStar) {
+    starsHTML += `<i class="fas fa-star-half-alt"></i>`;
+  }
+  for (let i = 0; i < emptyStars; i++) {
+    starsHTML += `<i class="far fa-star"></i>`;
+  }
+
+  return starsHTML;
+}

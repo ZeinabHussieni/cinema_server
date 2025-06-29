@@ -2,7 +2,7 @@
 require("../connection/connection.php");
 
 
-$query = "CREATE TABLE ratings(
+$query = "Create TABLE ratings(
           id INT AUTO_INCREMENT PRIMARY KEY,
           movie_id INT NOT NULL,
           rating FLOAT CHECK (rating >= 0 AND rating <= 5),

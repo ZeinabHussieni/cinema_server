@@ -64,6 +64,17 @@ class User extends Model{
         return [$this->id, $this->email,$this->phoneNumber,$this->password,$this->favoriteGenres,$this->paymentMethod,
                 $this->communicationPrefs];
     }
+    public static function findByEmail(mysqli $mysqli, string $email) {
+        $sql = sprintf("SELECT * FROM %s WHERE email = ?", static::$table);
+        $query = $mysqli->prepare($sql);
+        $query->bind_param("s", $email);
+        $query->execute();
+
+        $result = $query->get_result();
+        $data = $result->fetch_assoc();
+
+        return $data ? new static($data) : null;
+    }
 
   public static function insertUser(mysqli $mysqli,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
     $sql = sprintf("Insert into %s (email,phoneNumber,password,favoriteGenres,paymentMethod,communicationPrefs) values(?,?,?,?,?,?)", 

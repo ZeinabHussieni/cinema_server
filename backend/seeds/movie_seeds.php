@@ -2,6 +2,7 @@
 require("../connection/connection.php");
 
 try {
+
     $mysqli->query("
         INSERT INTO movies (id, title, description, status, release_date, poster_url, created_at) VALUES
         (1, 'Barbie', 'Life in plastic is fantastic.', 'Current', '2024-08-01', 'https://mir-s3-cdn-cf.behance.net/project_modules/hd/ce578c174088799.649bb208e091f.png', NOW()),
@@ -14,8 +15,14 @@ try {
         (8, 'Spider-Man', 'Miles Morales swings across the multiverse.', 'Current', '2024-05-20', 'http://cdn.collider.com/wp-content/uploads/amazing-spider-man-movie-poster.jpg', NOW()),
         (9, 'Avatar', 'Jake Sully lives with his new family on Pandora.', 'Current', '2024-01-15', 'https://static1.colliderimages.com/wordpress/wp-content/uploads/2022/12/coral_1sht_digital_4dx_srgb_v2.jpg', NOW()),
         (10, 'The Marvels', 'Three heroes collide in an epic cosmic team-up.', 'Upcoming', '2024-09-05', 'https://www.themoviedb.org/t/p/original/pbeK8zvKq2h1FGHkgC8ADUnk9uR.jpg', NOW()),
-        (11, 'Napoleon', 'The rise and fall of Napoleon Bonaparte.', 'Upcoming', '2024-08-12', 'https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2023/10/napoleon_ver5_xlg.jpg', NOW())
-    ");
+        (11, 'Napoleon', 'The rise and fall of Napoleon Bonaparte.', 'Upcoming', '2024-08-12', 'https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2023/10/napoleon_ver5_xlg.jpg', NOW()),
+        (12, 'Guardians', 'The cosmic team returns.', 'Upcoming', '2025-02-15', 'https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2022/12/Fi6te2xVUAE4GAJ.jpg', NOW()),
+        (13, 'John Wick', 'The legendary assassin continues.', 'Current', '2024-05-01', 'https://www.themoviedb.org/t/p/original/5w2pb3dxENKRl8VA7ADUTZ1cEOz.jpg', NOW()), 
+        (14, 'The Flash', 'Fastest hero races through time.', 'Upcoming', '2024-11-20', 'https://image.tmdb.org/t/p/original/uDnx0j18nFM4JFLMviF3GK1biTF.jpg', NOW()),
+        (15, 'Frozen 3', 'Let it go... again!', 'Upcoming', '2025-12-10', 'https://static1.srcdn.com/wordpress/wp-content/uploads/2023/02/frozen-3-temp-poster.jpg', NOW()),
+        (16, 'Mission Impossible 7', 'More impossible missions.', 'Upcoming', '2025-07-04', 'https://www.bestmovieposters.co.uk/wp-content/uploads/2020/07/mission-impossible_fc119e26-scaled.jpg', NOW())
+
+        ");
 
 
     // seeds for trailers
@@ -31,7 +38,13 @@ try {
         (8, 'https://www.youtube.com/watch?v=t06RUxPbp_c'),
         (9, 'https://www.youtube.com/watch?v=d9MyW72ELq0'),
         (10, 'https://www.youtube.com/watch?v=wS_qbDztgVY'),
-        (11, 'https://www.youtube.com/watch?v=OAZWXUkrjPc')
+        (11, 'https://www.youtube.com/watch?v=OAZWXUkrjPc'),
+        (12, 'https://www.youtube.com/watch?v=G7Idy8LSdQo'),
+        (13, 'https://www.youtube.com/watch?v=C0BMx-qxsP4'),
+        (14, 'https://www.youtube.com/watch?v=hebWYacbdvc'),
+        (15, 'https://www.youtube.com/watch?v=gvlMel9ZBdg'),
+        (16, 'https://www.youtube.com/watch?v=2m1drlOZSDw')
+
     ");
 
     // seeds for cast
@@ -47,7 +60,13 @@ try {
         (8, 'Shameik Moore', 'Miles Morales'),
         (9, 'Sam Worthington', 'Jake Sully'),
         (10, 'Brie Larson', 'Carol Danvers'),
-        (11, 'Joaquin Phoenix', 'Napoleon Bonaparte')
+        (11, 'Joaquin Phoenix', 'Napoleon Bonaparte'),
+        (12, 'Zoe Saldana', 'Gamora'),
+        (13, 'Keanu Reeves', 'John Wick'),
+        (14, 'Ezra Miller', 'The Flash'),
+        (15, 'Idina Menzel', 'Elsa'),
+        (16, 'Tom Cruise', 'Ethan Hunt')
+
     ");
 
     // seeds for ratings
@@ -63,7 +82,13 @@ try {
         (8, 5),
         (9, 4),
         (10, 3),
-        (11, 4)
+        (11, 4),
+        (12, 5),
+        (13, 4),
+        (14, 3),
+        (15, 4),
+        (16, 4)
+
     ");
 
     echo "Seeded successfull";

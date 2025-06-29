@@ -17,20 +17,4 @@ abstract class Model{
 
  }
 
- public static function findByEmail(mysqli $mysqli, string $email){
-    $sql = sprintf("Select * from %s WHERE email = ?",
-                     static::$table);
-
-    $query = $mysqli->prepare($sql);
-    $query->bind_param("s",$email);
-    $query->execute();
-
-    $data=$query->get_result()->fetch_assoc();
-    return $data ? new static($data):null;
- }
-
-
-   
-
-
 }

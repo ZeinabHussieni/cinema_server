@@ -100,9 +100,12 @@ html, body {
     color: rgba(255, 255, 255, 0.957);
 }
 .scroll {
-  display: flex;
-  gap: 1.5rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, auto); /* 2 rows! */
+  grid-auto-columns: minmax(250px, 1fr); /* card width */
   overflow-x: auto;
+  gap: 1.5rem;
   padding: 2rem;
   scroll-behavior: smooth;
 }

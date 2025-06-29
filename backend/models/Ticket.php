@@ -8,6 +8,8 @@ class Ticket extends Model{
     private $quantity;
     private $seat_number;
     private $purchase_date;
+    private $price;        
+    private $payment_status; 
 
     protected static string $table = "tickets";
     public function __construct(array $data){
@@ -17,6 +19,8 @@ class Ticket extends Model{
         $this->quantity = $data["quantity"];
         $this->seat_number = $data["seat_number"] ?? null;
         $this->purchase_date = $data["purchase_date"];
+        $this->price = $data["price"] ?? 0.0;
+        $this->payment_status = $data["payment_status"] ?? 'pending';
     }
     
     public function getId():int{
@@ -37,7 +41,18 @@ class Ticket extends Model{
         public function getPurchase_date(): string{
         return $this->purchase_date;
     }
-  
+     public function getPrice(): float {
+        return $this->price;
+    }
+    public function getPaymentStatus(): string {
+        return $this->payment_status;
+    }
+    public function setPaymentStatus(string $status) {
+        $this->payment_status = $status;
+    }
+    public function setPrice(float $price) {
+        $this->price = $price;
+    }
     public function setQuantity(string $quantity){
         $this->quantity=$quantity;
     }
@@ -50,41 +65,50 @@ class Ticket extends Model{
     }
 
     public function toArray(){
-        return [$this->id, $this->user_id,$this->showtime_id,$this->quantity,$this->seat_number,$this->purchase_date];}
+        return [$this->id, $this->user_id,$this->showtime_id,$this->quantity,$this->seat_number,$this->purchase_date,$this->price,
+            $this->payment_status];}
 
 
-public static function BuyTickets(mysqli $mysqli, int $userId, int $showtimeId, array $seatNumbers):bool {
-    // first we get all taken seats
+public static function BuyTickets(mysqli $mysqli, int $userId, int $showtimeId, array $seatNumbers, float $ticketPrice): bool {
+    // get taken seats
     $sql = "Select seat_number FROM tickets WHERE showtime_id = ?";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("i", $showtimeId);
     $stmt->execute();
     $res = $stmt->get_result();
-    //now we need array to put taken seats
     $taken = [];
     while ($row = $res->fetch_assoc()) {
-        $taken[]=(int)$row['seat_number'];
+        $taken[] = (int)$row['seat_number'];
     }
 
-    // we need to see if user requesting taken seat
+    // check for taken seats requested
     foreach ($seatNumbers as $seat) {
         if (in_array($seat, $taken)) {
-                 error_log("Seat $seat already taken.");
+            error_log("Seat $seat already taken.");
             return false;
         }
     }
-     $sqlInsert = "Insert INTO tickets (user_id, showtime_id, quantity, seat_number) VALUES (?, ?, 1, ?)";
-     $stmtInsert = $mysqli->prepare($sqlInsert);
-     foreach ($seatNumbers as $seat) {
-     $stmtInsert->bind_param("iii", $userId, $showtimeId, $seat); 
 
-    if (!$stmtInsert->execute()) {
+    $sqlInsert = "Insert INTO tickets (user_id, showtime_id, quantity, seat_number, price, payment_status)
+                  VALUES (?, ?, ?, ?, ?, 'paid')";
+    $stmtInsert = $mysqli->prepare($sqlInsert);
+    if (!$stmtInsert) {
+        error_log("Prepare failed: " . $mysqli->error);
+        return false;
+    }
+    $quantity = 1; // Each seat is one ticket
+    // Insert each seat
+    foreach ($seatNumbers as $seat) {
+        $stmtInsert->bind_param("iiiid", $userId, $showtimeId, $quantity, $seat, $ticketPrice);
+        if (!$stmtInsert->execute()) {
             error_log("Insert failed for seat $seat: " . $stmtInsert->error);
             return false;
         }
     }
+
     return true;
 }
+
     //check user if he can buy more tickets
     public static function canBuyTickets(mysqli $mysqli, int $userId, int $movieId, int $newQuantity, int $maxAllowed = 5): bool {
         $sql = "Select IFNULL(SUM(t.quantity), 0) AS total FROM tickets t
