@@ -37,9 +37,14 @@ document.addEventListener("DOMContentLoaded", () => {
        const email = user[1];
        const phoneNumber = user[2];
 
-       localStorage.setItem("userId", userId);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("email", email);
        console.log("Saved userId in localStorage:", userId);
-        
+        if (email === "ZeinabAdmin@gmail.com" && password === "Ah.2392002") {
+          localStorage.setItem("isAdmin", "true");
+        } else {
+          localStorage.setItem("isAdmin", "false");
+        }
         window.location.href = "http://localhost/cinema_server/frontend/Pages/index.html"; 
       } else {
         alert(response.data.message || "User not found.");

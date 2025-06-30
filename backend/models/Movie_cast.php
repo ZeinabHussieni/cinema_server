@@ -38,5 +38,17 @@ class Movie_cast extends Model{
     public function toArray(){
         return [$this->id, $this->movie_id,$this->actor_name,$this->role_name];
     }
+      public static function createmoviecast(mysqli $mysqli,$movie_id,$actor_name,$role_name):bool{
+        $sql=sprintf("Insert Into %s (movie_id,actor_name,role_name) values 
+              (?,?,?)",static::$table);
+        $stmt = $mysqli->prepare($sql);
+        if(!$stmt){
+            error_log("Insert Failed:".$mysql->error);
+            return false;
+        }
+         $stmt->bind_param("iss",$movie_id,$actor_name,$role_name);
+         $stmt->execute();
+         return true;
+    }
 
 }      

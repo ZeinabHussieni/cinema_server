@@ -1,3 +1,15 @@
+ document.addEventListener("DOMContentLoaded", () => {
+    const addMovieLink = document.getElementById("addMovieLink");
+    const isAdmin = localStorage.getItem("isAdmin");
+    if (addMovieLink) {
+      if (isAdmin === "true") {
+        addMovieLink.style.display = "inline-block";
+      } else {
+        addMovieLink.style.display = "none";
+      }
+    }
+});
+
 lottie.loadAnimation({
   container: document.getElementById('lottie-player'),
   renderer: 'svg',
@@ -86,3 +98,4 @@ function generateStars(rating) {
 
   return starsHTML;
 }
+

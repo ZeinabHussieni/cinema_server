@@ -31,5 +31,16 @@ class Trailer extends Model{
     public function toArray(){
         return [$this->id, $this->movie_id,$this->trailer_url];
     }
-
+public static function createtrialers(mysqli $mysqli,$movie_id,$trailer_url):bool{
+        $sql=sprintf("Insert Into %s (movie_id,trailer_url) values 
+              (?,?)",static::$table);
+        $stmt = $mysqli->prepare($sql);
+        if(!$stmt){
+            error_log("Insert Failed:".$mysql->error);
+            return false;
+        }
+         $stmt->bind_param("is",$movie_id,$trailer_url);
+         $stmt->execute();
+         return true;
+    }
 }      

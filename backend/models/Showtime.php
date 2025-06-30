@@ -88,6 +88,18 @@ class Showtime extends Model {
     $result = $stmt->get_result()->fetch_assoc();
     return $result ? (float)$result["ticket_price"] : null;
 }
-
+ 
+    public static function createshowtime(mysqli $mysqli,$movie_id,$show_datetime,$capacity,$created_at,$ticket_price):bool{
+        $sql=sprintf("Insert Into %s (movie_id,show_datetime,capacity,created_at,ticket_price) values 
+              (?,?,?,?,?)",static::$table);
+        $stmt = $mysqli->prepare($sql);
+        if(!$stmt){
+            error_log("Insert Failed:".$mysql->error);
+            return false;
+        }
+         $stmt->bind_param("isisi",$movie_id,$show_datetime,$capacity,$created_at,$ticket_price);
+         $stmt->execute();
+         return true;
+    }
 
 }
