@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+
 function generateStars(rating) {
   rating = Number(rating);
   if (isNaN(rating) || rating < 0) rating = 0;

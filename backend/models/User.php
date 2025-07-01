@@ -65,7 +65,7 @@ class User extends Model{
                 $this->communicationPrefs];
     }
     public static function findByEmail(mysqli $mysqli, string $email) {
-        $sql = sprintf("SELECT * FROM %s WHERE email = ?", static::$table);
+        $sql = sprintf("Select * FROM %s WHERE email = ?", static::$table);
         $query = $mysqli->prepare($sql);
         $query->bind_param("s", $email);
         $query->execute();

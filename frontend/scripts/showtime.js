@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Lottie animation
   lottie.loadAnimation({
     container: document.getElementById("lottie-player"),
     renderer: "svg",
@@ -9,50 +8,69 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const form = document.getElementById("addShowtimeForm");
-  if (!form) {
-    console.error("Showtime form not found!");
+  const addAnotherBtn = document.getElementById("addAnotherBtn");
+  const next = document.getElementById("next");
+
+  if (!form || !addAnotherBtn || !next) {
+    console.error("Required elements missing!");
     return;
   }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  const urlParams = new URLSearchParams(window.location.search);
+  const movieId = urlParams.get("id");
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get("id");
-    const show_datetime = document.getElementById("show_datetime").value;
-    const capacity = document.getElementById("capacity").value;
-    const ticket_price = document.getElementById("ticket_price").value;
-    const created_at = new Date().toISOString().slice(0, 19).replace("T", " ");
+  function collectShowtimeData() {
+    return {
+      movie_id: movieId,
+      show_datetime: document.getElementById("show_datetime").value,
+      capacity: document.getElementById("capacity").value,
+      ticket_price: document.getElementById("ticket_price").value,
+      created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+    };
+  }
 
-    if (!movieId) {
-      alert("Missing movie ID — can’t assign showtime");
+  function validateShowtime(data) {
+    return (
+      data.movie_id &&
+      data.show_datetime &&
+      data.capacity &&
+      data.ticket_price
+    );
+  }
+
+  function saveShowtimeAndRedirect(redirectUrl) {
+    const data = collectShowtimeData();
+
+    if (!validateShowtime(data)) {
+      alert("Please fill all fields!");
       return;
     }
-
-    const showtimeData = {
-      movie_id: movieId,
-      show_datetime,
-      capacity,
-      created_at,
-      ticket_price,
-    };
 
     axios
       .post(
         "http://localhost/cinema_server/backend/controllers/create_showtimes.php",
-        showtimeData
+        data
       )
       .then((response) => {
         if (response.data.success) {
-          alert("Showtime added successfully");
-         window.location.href = `addRating.html?id=${movieId}`;
+          alert("Showtime saved!");
+          window.location.href = redirectUrl;
         } else {
-          alert("Failed to add showtime: " + response.data.message);
+          alert("Failed to save showtime: " + response.data.message);
         }
       })
       .catch((error) => {
-        console.error("Showtime Error:", error);
-        alert("Something went wrong while adding showtime");
+        console.error("Showtime save error:", error);
+        alert("Error saving showtime.");
       });
+  }
+
+  addAnotherBtn.addEventListener("click", () => {
+    saveShowtimeAndRedirect(`addShowtime.html?id=${movieId}`);
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    saveShowtimeAndRedirect(`addRating.html?id=${movieId}`);
   });
 });
