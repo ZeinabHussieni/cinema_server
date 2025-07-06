@@ -1,50 +1,53 @@
 <!DOCTYPE html>
-<html>
-    <head>
-  <link rel="stylesheet" href="../styles/addMovie.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Movie Cast</title>
 
-        <title>
-            Add Movir_Cast page
-        </title>
-    </head>
-    <body>
-        <div class='Movie-page'>
-            <div class='circles circle1'></div>
-            <div class='circles circle2'></div>
-            <div class='circles circle3'></div>
-            <div class="box-wrapper">
-            <div class="container">
-            <div id="lottie-player" class="animation-container"></div>
-            <div class="Movie-container">
-            <h2 class="animated-heading">Add Movie Cast</h2>
+
+  <link rel="stylesheet" href="../styles/addMovie.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <div class="Movie-page">
+    <div class="circles circle1"></div>
+    <div class="circles circle2"></div>
+    <div class="circles circle3"></div>
+
+    <div class="box-wrapper">
+      <div class="container">
+        <div id="lottie-player" class="animation-container"></div>
+
+        <div class="Movie-container">
+          <h2 class="animated-heading">Add Movie Cast</h2>
+
           <form id="addCastForm">
-           <div class="form-row">
-           <div class="form-group">
-           <label for="actor_name"><i class="fas fa-user"></i> Actor Name:</label>
-           <input id="actor_name" type="text" placeholder="Enter actor's name" required class='input'/>
-          </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="actor_name"><i class="fas fa-user"></i> Actor Name:</label>
+                <input id="actor_name" type="text" placeholder="Enter actor's name" required class="input" />
+              </div>
 
-          <div class="form-group">
-         <label for="role_name"><i class="fas fa-mask"></i> Role Name:</label>
-         <input id="role_name" type="text" placeholder="Enter role name" required class='input'/>
-         </div>
-         </div>
+              <div class="form-group">
+                <label for="role_name"><i class="fas fa-mask"></i> Role Name:</label>
+                <input id="role_name" type="text" placeholder="Enter role name" required class="input" />
+              </div>
+            </div>
 
-          <div class="button-group">   
-         <a href="addTrailer.html" class="back-button">Back</a>
-          <button type="submit" class="Movie-button">
-            Next 
-         </button>
-         </div>
-     </form>
+            <div class="button-group">
+              <a href="addTrailer.html" class="back-button">Back</a>
+              <button type="submit" class="Movie-button">Next</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    </div>
-    </div>
-    </div>
-    </div>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
-        <script src="../scripts/movie_cast.js"></script>
-    </body>
+  
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+  <script src="../scripts/movie_cast.js"></script>
+</body>
 </html>

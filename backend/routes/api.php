@@ -23,12 +23,40 @@ if ($request == '') {
 //It's an key-value array where the value is an key-value array
 //----------------------------------------------------------
 $apis = [
+    //user
     '/user'         => ['controller' => 'UserController', 'method' => 'getUser'],
     '/delete_userbyId'         => ['controller' => 'UserController', 'method' => 'DeleteUser'],
     '/update_user'         => ['controller' => 'UserController', 'method' => 'updateUser'],
     '/create_user'         => ['controller' => 'UserController', 'method' => 'createUser'],
     '/get_userbyemail'    => ['controller' => 'UserController', 'method' => 'getUserByEmail'],
+   
+    //movie
+    '/delete_moviebyId'         => ['controller' => 'MovieController', 'method' => 'DeleteMovie'],
+    '/get_movieDetailsById'         => ['controller' => 'MovieController', 'method' => 'getMovie'],
+    '/get_Allmovies'         => ['controller' => 'MovieController', 'method' => 'getAllMovies'],
+    '/create_movie'         => ['controller' => 'MovieController', 'method' => 'createMovie'],
+     
+    //Trailer 
+    '/create_trailer'         => ['controller' => 'TrailerController', 'method' => 'createTrailer'],
+   
+    //movie cast
+    '/create_Moviecast'         => ['controller' => 'Movie_CastController', 'method' => 'createMovieCast'],
 
+    //showtime 
+    '/create_Showtime'         => ['controller' => 'ShowtimeController', 'method' => 'createShowtime'],
+    '/get_showtimebyMovieId'         => ['controller' => 'ShowtimeController', 'method' => 'getShowtimeByMovieId'],
+
+    //Rating
+    '/create_rating'         => ['controller' => 'RatingController', 'method' => 'createrating'],
+
+    //tickets 
+    '/Buy_Ticket'         => ['controller' => 'TicketController', 'method' => 'BuyTicket'],
+    '/get_TakenSeats'         => ['controller' => 'TicketController', 'method' => 'getTakenSeats'],
+    '/get_UserTicket'         => ['controller' => 'TicketController', 'method' => 'getUserTickets'],
+
+    //snack 
+    '/get_ShowtimeSnacks'         => ['controller' => 'SnackOrderController', 'method' => 'getSnackShowTime'],
+    '/Order_snack'         => ['controller' => 'SnackOrderController', 'method' => 'insertSnack'],
 
 ];
 

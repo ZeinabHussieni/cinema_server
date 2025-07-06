@@ -1,5 +1,6 @@
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Lottie animation
+
   lottie.loadAnimation({
     container: document.getElementById('lottie-player'),
     renderer: 'svg',
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       trailer_url: trailer_url
     };
 
-    axios.post("http://localhost/cinema_server/backend/controllers/create_trailer.php", trailerData)
+    axios.post("http://localhost/cinema_server/backend/create_trailer", trailerData)
       .then(response => {
         if (response.data.success) {
           alert("Trailer added successfully");
@@ -40,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch(error => {
-        console.error("Trailer Error:", error);
         alert("Something went wrong while adding trailer");
       });
   });

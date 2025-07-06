@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     axios
       .post(
-        "http://localhost/cinema_server/backend/controllers/create_showtimes.php",
+        "http://localhost/cinema_server/backend/create_Showtime",
         data
       )
       .then((response) => {

@@ -32,17 +32,5 @@ class Rating extends Model{
     public function toArray(){
         return [$this->id, $this->movie_id,$this->rating];
     }
-    public static function createrating(mysqli $mysqli,$movie_id,$rating):bool{
-        $sql=sprintf("Insert Into %s (movie_id,rating) values 
-              (?,?)",static::$table);
-        $stmt = $mysqli->prepare($sql);
-        if(!$stmt){
-            error_log("Insert Failed:".$mysql->error);
-            return false;
-        }
-         $stmt->bind_param("is",$movie_id,$rating);
-         $stmt->execute();
-         return true;
-    }
 
 }      

@@ -18,7 +18,7 @@ class UserController extends BaseController {
                 return $this->error("User not found", 404);
             }
 
-           return $this->respondSuccess($user->toArray());
+           return $this->respondSuccess(['user' => $user->toArray()]);
         }} catch (Exception $e) {
         $this->error($e->getMessage(), 500);
         }

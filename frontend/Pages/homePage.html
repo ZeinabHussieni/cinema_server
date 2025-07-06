@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard</title>
+
+  <link rel="stylesheet" href="../styles/Dashbored.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <div id="lottie-player" class="animation-container"></div>
+      <h1 class="cinema-name">Moonlight Cinema</h1>
+    </div>
+
+    <div class="nav-links">
+      <a href="./snack.html" class="link-button">Order Snacks</a>
+      <a href="./addMovie.html" id="addMovieLink" class="link-button">Add Movies</a>
+    </div>
+
+    <div class="pro-menu">
+      <img
+        src="https://static.vecteezy.com/system/resources/previews/027/448/973/large_2x/avatar-account-icon-default-social-media-profile-photo-vector.jpg"
+        alt="Profile"
+        class="pro-pic"
+      />
+      <ul class="dropdown">
+        <li><a href="./profile.html">Profile</a></li>
+        <li><a href="./register.html">Register</a></li>
+        <li><a id="logout">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="Dashbored-Page">
+    <div class="start">
+      <h1>Welcome to Moonlight Cinema</h1>
+      <p>Your ultimate movie experience starts here.</p>
+    </div>
+
+    <div class="section-title">
+      <h2 class="action-name">Now Showing</h2>
+      <div id="lottie2-player" class="animationaction-container"></div>
+    </div>
+    <div class="scroll">
+      <div class="current-movies now-showing"></div>
+    </div>
+
+    <div class="section-title">
+      <h2 class="action-name">Upcoming</h2>
+      <div id="upcoming-player" class="animationupcoming-container"></div>
+    </div>
+    <div class="scroll">
+      <div class="current-movies upcoming"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+  <script src="../scripts/homepage.js"></script>
+  <script src="../scripts/logout.js"></script>
+</body>
+</html>

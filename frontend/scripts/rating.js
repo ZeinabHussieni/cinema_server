@@ -32,11 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     axios
-      .post("http://localhost/cinema_server/backend/controllers/create_rating.php", ratingData)
+      .post("http://localhost/cinema_server/backend/create_rating", ratingData)
       .then((response) => {
         if (response.data.success) {
           alert("Rating added successfully");
-          window.location.href = "index.html";
+          window.location.href = "homePage.html";
         } else {
           alert("Failed to add rating: " + response.data.message);
         }

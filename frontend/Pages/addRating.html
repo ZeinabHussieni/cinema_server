@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="../styles/addMovie.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles/addMovie.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
   <title>Add Rating</title>
 </head>
 <body>
@@ -11,30 +14,31 @@
     <div class="circles circle1"></div>
     <div class="circles circle2"></div>
     <div class="circles circle3"></div>
-    <div class="box-wrapper">
-    <div class="container">
-    <div id="lottie-player" class="animation-container"></div>
-    <div class="Movie-container">
-    <h2 class="animated-heading">Add Movie Rating</h2>
-    <form id="addRatingForm">
-    <div class="form-row">
-    <div class="form-group">
-        <label for="rating"><i class="fas fa-star"></i> Rating (1 to 5):</label>
-        <input id="rating" type="number" min="1" max="5" step="0.5" placeholder="Enter rating" required class="input"/>
-    </div>
-    </div>
 
-    <div class="button-group">
-    <a href="addShowtime.html" class="back-button">Back</a>
-    <button type="submit" class="Movie-button">
-     Submit
-    </button>
+    <div class="box-wrapper">
+      <div class="container">
+        <div id="lottie-player" class="animation-container"></div>
+
+        <div class="Movie-container">
+          <h2 class="animated-heading">Add Movie Rating</h2>
+
+          <form id="addRatingForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="rating"><i class="fas fa-star"></i> Rating (1 to 5):</label>
+                <input id="rating" type="number" min="1" max="5" step="0.5" placeholder="Enter rating" required class="input"/>
+              </div>
+            </div>
+
+            <div class="button-group">
+              <a href="addShowtime.html" class="back-button">Back</a>
+              <button type="submit" class="Movie-button">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-   </form>
-</div>
-</div>
-</div>
-</div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>

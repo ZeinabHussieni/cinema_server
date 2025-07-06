@@ -31,16 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const user = response.data; 
 
       if (user) {
-        const userId = user.id;
-        const userEmail = user.email;
+       const userId = user[0];
+       const userEmail = user[1];
 
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("email", userEmail);
+       localStorage.setItem("userId", userId);
+       localStorage.setItem("email", userEmail);
+  
 
-        const isAdmin = (userEmail === "ZeinabAdmin@gmail.com" && password === "Ah.2392002");
-        localStorage.setItem("isAdmin", isAdmin ? "true" : "false");
+       const isAdmin = (userEmail === "ZeinabAdmin@gmail.com" && password === "Ah.2392002");
+       localStorage.setItem("isAdmin", isAdmin ? "true" : "false");
 
-        window.location.href = "http://localhost/cinema_server/frontend/Pages/index.html";
+       window.location.href = "http://localhost/cinema_server/frontend/Pages/homePage.html";
       } else {
         alert("User not found.");
       }

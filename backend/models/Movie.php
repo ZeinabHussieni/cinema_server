@@ -57,9 +57,9 @@ class Movie extends Model{
     public function setPoster_url(string $poster_url){
         $this->poster_url=$poster_url;
     }
-
-public function toArray() {
-    return [
+ 
+    public function toArray() {
+     return [
         "id" => $this->id,
         "title" => $this->title,
         "description" => $this->description,
@@ -67,20 +67,21 @@ public function toArray() {
         "release_date" => $this->release_date,
         "poster_url" => $this->poster_url,
         "created_at" => $this->created_at
-    ];
-}
-    public static function createMovie(mysqli $mysqli,$title,$description,$status,$release_date,$poster_url,$created_at):bool{
-        $sql=sprintf("Insert Into %s (title,description,status,release_date,poster_url,created_at) values 
-              (?,?,?,?,?,?)",static::$table);
-        $stmt = $mysqli->prepare($sql);
-        if(!$stmt){
-            error_log("Insert Failed:".$mysql->error);
-            return false;
-        }
-         $stmt->bind_param("ssssss",$title,$description,$status,$release_date,$poster_url,$created_at);
-         $stmt->execute();
-         return true;
+      ];
     }
+
+    // public static function createMovie(mysqli $mysqli,$title,$description,$status,$release_date,$poster_url,$created_at):bool{
+    //     $sql=sprintf("Insert Into %s (title,description,status,release_date,poster_url,created_at) values 
+    //           (?,?,?,?,?,?)",static::$table);
+    //     $stmt = $mysqli->prepare($sql);
+    //     if(!$stmt){
+    //         error_log("Insert Failed:".$mysql->error);
+    //         return false;
+    //     }
+    //      $stmt->bind_param("ssssss",$title,$description,$status,$release_date,$poster_url,$created_at);
+    //      $stmt->execute();
+    //      return true;
+    // }
 
     public static function MoviesDetails(mysqli $mysqli):?array{
                                         $sql=("Select m.id,m.title,m.description,m.status,m.release_date,m.poster_url,m.created_at,GROUP_CONCAT(DISTINCT t.trailer_url) as trailers,
@@ -119,16 +120,16 @@ public function toArray() {
 
                     
     }
-    public static function DeleteById(mysqli $mysqli, $id): bool {
-    $sql = sprintf("DELETE FROM %s WHERE id = ?", static::$table);
-    $stmt = $mysqli->prepare($sql);
-    if (!$stmt) {
-        error_log("Delete Failed: " . $mysqli->error);
-        return false;
-    }
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    return true; 
-}
+//     public static function DeleteById(mysqli $mysqli, $id): bool {
+//     $sql = sprintf("DELETE FROM %s WHERE id = ?", static::$table);
+//     $stmt = $mysqli->prepare($sql);
+//     if (!$stmt) {
+//         error_log("Delete Failed: " . $mysqli->error);
+//         return false;
+//     }
+//     $stmt->bind_param("i", $id);
+//     $stmt->execute();
+//     return true; 
+// }
 
 }      

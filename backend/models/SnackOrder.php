@@ -87,30 +87,28 @@ class SnackOrder extends Model {
     }
     return $snacks;
 }
-  public static function insertSnackOrder(mysqli $mysqli, array $data): bool {
-    $query = "Insert INTO snack_orders (user_id, ticket_id, movie_id, showtime_id, seat_number, snack_id, quantity, price, order_time, delivery_status)
+  public static function insertSnackOrder(mysqli $mysqli, int $user_id, int $ticket_id, int $movie_id, int $showtime_id, string $seat_number,
+                                         int $snack_id, int $quantity, float $price): bool {
+     $query = "Insert INTO snack_orders (user_id, ticket_id, movie_id, showtime_id, seat_number, snack_id, quantity, price, order_time, delivery_status)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT)";
 
-    $stmt = $mysqli->prepare($query);
-    if (!$stmt) {
-        error_log("Prepare failed: " . $mysqli->error);
-        return false;
+     $stmt = $mysqli->prepare($query);
+     if (!$stmt) {
+         error_log("Prepare failed: " . $mysqli->error);
+         return false;
+       }
+     $stmt->bind_param("iiiisidd", $user_id, $ticket_id, $movie_id, $showtime_id, $seat_number, $snack_id, $quantity, $price);
+
+     return $stmt->execute();
     }
-    //here we used data cause we are getting data from assoc array like get me this index from this array
-    $stmt->bind_param(
-      "iiiisidd",$data['user_id'],$data['ticket_id'],$data['movie_id'],$data['showtime_id'],
-      $data['seat_number'],$data['snack_id'],$data['quantity'],$data['price']);
 
-    return $stmt->execute();
-}
-
-  public static function getSnackNameById(mysqli $mysqli, int $snackId): string {
-    $sql = "Select snack_name FROM snack_menu WHERE id = ?";
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("i", $snackId);
-    $stmt->execute();
-    $res = $stmt->get_result()->fetch_assoc();
-    return $res ? $res["snack_name"] : "Unknown";
-}
+    public static function getSnackNameById(mysqli $mysqli, int $snackId): string {
+       $sql = "Select snack_name FROM snack_menu WHERE id = ?";
+       $stmt = $mysqli->prepare($sql);
+       $stmt->bind_param("i", $snackId);
+       $stmt->execute();
+       $res = $stmt->get_result()->fetch_assoc();
+       return $res ? $res["snack_name"] : "Unknown";
+    }
 
 }

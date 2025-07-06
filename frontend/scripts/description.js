@@ -1,38 +1,42 @@
-const urlParams = new URLSearchParams(window.location.search);//grabs everything in the info after th '?' in the url
-const movieId = urlParams.get('id');
+// get movie id from URL 
+const urlParams = new URLSearchParams(window.location.search);
+const movieId = urlParams.get("id");
 
+// global state variables to use them 
+let selectedShowtimeId = null;
+let selectedSeatsArray = [];
+let ticketPrice = 0;
+
+// movie details 
 if (movieId) {
-  axios.get("http://localhost/cinema_server/backend/controllers/get_movies.php", {
+  axios.get("http://localhost/cinema_server/backend/get_movieDetailsById", {
     params: { id: movieId }
-  }).then(response => {
-    const data = response.data; 
+  })
+  .then(response => {
+    const data = response.data;
     if (data.movie) {
       const movie = data.movie;
-      const [actorName, roleName] = movie.movie_cast && movie.movie_cast.includes('as')
-      ? movie.movie_cast.split('as')
-      : ["Unknown", "Unknown"];
+      const [actorName, roleName] = movie.movie_cast && movie.movie_cast.includes("as")
+        ? movie.movie_cast.split("as").map(str => str.trim())
+        : ["Unknown", "Unknown"];
 
-      //we put the title of movie
-      document.querySelector('.heading').textContent = movie.title;
-      //and other movie details
-      document.querySelector('.movie-details').innerHTML = `
+      document.querySelector(".heading").textContent = movie.title;
+      document.querySelector(".movie-details").innerHTML = `
         <p><strong>Description:</strong> ${movie.description}</p>
         <p><strong>Actor Name:</strong> ${actorName}</p>
         <p><strong>Actor Role:</strong> ${roleName}</p>
-        <p><strong>Rating:</strong> 
-        ${movie.ratings ? `${generateStars(movie.ratings)}` : "Not rated"}
-        </p>
+        <p><strong>Rating:</strong> ${movie.ratings ? generateStars(movie.ratings) : "Not rated"}</p>
         <p><strong>Status:</strong> ${movie.status}</p>
-        <p><strong>Release Date:</strong> ${movie.release_date}</p>`;
+        <p><strong>Release Date:</strong> ${movie.release_date}</p>
+      `;
 
-      // to update the poster that we have
-      const poster = document.querySelector('.poster_url');
+      // poster and trailer 
+      const poster = document.querySelector(".poster_url");
       poster.src = movie.poster_url;
       poster.alt = movie.title;
 
-      // to update the trailer
-      const trailerLink = (movie.trailers || "").split(",")[0]; // in case we have more then one trailers
-      document.querySelector('.video-wrapper iframe').src = trailerLink.replace("watch?v=", "embed/");//replace it to make iframe understand the url
+      const trailerLink = (movie.trailers || "").split(",")[0];
+      document.querySelector(".video-wrapper iframe").src = trailerLink.replace("watch?v=", "embed/");
     } else {
       alert(data.message || "Movie not found");
     }
@@ -41,123 +45,69 @@ if (movieId) {
     console.error("Axios error:", error);
     alert("Failed to fetch movie data.");
   });
-
 } else {
   alert("No movie ID provided in the URL");
 }
-//get showtime id
-let selectedShowtimeId = null;
-let selectedSeatsArray = [];
-let ticketPrice = 0;
 
+//  showtimes dropdown 
 if (movieId) {
-  // get the showtimes for movie
-  axios.get("http://localhost/cinema_server/backend/controllers/get_showtimeId.php", {
+  //fill in all showtimes available
+  axios.get("http://localhost/cinema_server/backend/get_showtimebyMovieId", {
     params: { movie_id: movieId }
-  }).then(res => {
-
-      const showtimes = res.data.showtimes;
-  console.log(showtimes); // debug check
-    if (showtimes.length === 0) {
+  })
+  .then(res => {
+    const showtimes = res.data.showtimes;
+    if (!showtimes || showtimes.length === 0) {
       alert("No showtimes available");
       return;
     }
-    //we do this method to asgin all showtimes to a dropdown
-    const select=document.getElementById("showtimeSelect");
+     
+    //get the list and fill it in dropdown
+    const select = document.getElementById("showtimeSelect");
     select.innerHTML = "";
-   // After this part where you append all options:
-   showtimes.forEach(showtime => {
-   const option = document.createElement("option");
-   option.value = showtime.id;
-   option.textContent = new Date(showtime.show_datetime).toLocaleString();
-   option.dataset.capacity = showtime.capacity;
-   option.dataset.ticket_price = showtime.ticket_price;
-   select.appendChild(option);
-   console.log("Option ticket price:", option.dataset.ticket_price, typeof option.dataset.ticket_price);
-});
- const initialOption = select.options[select.selectedIndex];
- ticketPrice = initialOption ? Number(initialOption.dataset.ticket_price) : 0;
- console.log("Initial ticketPrice set to:", ticketPrice);
 
- // continue loading seats and stuff
- selectedShowtimeId = select.value;
- loadTakenSeats(selectedShowtimeId);
- select.addEventListener("change", (e) => {
- selectedShowtimeId = select.value;
+    showtimes.forEach(showtime => {
+      const option = document.createElement("option");
+      option.value = showtime.id;
+      option.textContent = new Date(showtime.show_datetime).toLocaleString();
+      option.dataset.capacity = showtime.capacity;
+      option.dataset.ticket_price = showtime.ticket_price;
+      select.appendChild(option);
+    });
 
- const initialSelectedOption = select.querySelector(`option[value="${selectedShowtimeId}"]`);
- ticketPrice = initialSelectedOption ? Number(initialSelectedOption.dataset.ticket_price) : 0;
- console.log("Initial ticketPrice:", ticketPrice);
+    // take the first showtime default with price and save id 
+    const initialOption = select.options[select.selectedIndex];
+    ticketPrice = initialOption ? Number(initialOption.dataset.ticket_price) : 0;
+    selectedShowtimeId = select.value;
 
- loadTakenSeats(selectedShowtimeId);
+    //display seats already taken
+    loadTakenSeats(selectedShowtimeId);
 
-  document.getElementById("totalPrice").textContent = `Total Price: $0.00`;
-  loadTakenSeats(selectedShowtimeId);
-});
-  }).catch(err => {
+    // update when pick different showtimes
+    select.addEventListener("change", () => {
+      selectedShowtimeId = select.value;
+      const selectedOption = select.querySelector(`option[value="${selectedShowtimeId}"]`);
+      ticketPrice = selectedOption ? Number(selectedOption.dataset.ticket_price) : 0;
+
+      selectedSeatsArray = [];
+      document.getElementById("totalPrice").textContent = `Total Price: $0.00`;
+      loadTakenSeats(selectedShowtimeId);
+    });
+  })
+  .catch(err => {
     console.error("Error loading showtimes:", err);
   });
-
-} else {
-  alert("No movie ID provided in the URL");
-}
-//create table of seats
-function renderSeats(takenSeats, capacity) {
-  const seatsGrid = document.getElementById("seats-grid");
-  seatsGrid.innerHTML = "";
-  const COLS = 10;
-  const seatsToRender = capacity;
-  const ROWS = Math.ceil(seatsToRender / COLS);
-
-
-  for (let seatNum = 1; seatNum <= seatsToRender; seatNum++) {
-    const seat = document.createElement("button");
-    seat.classList.add("seat");
-    seat.textContent = seatNum;
-
-    if (takenSeats.includes(seatNum)) {
-      seat.classList.add("taken");
-      seat.setAttribute("aria-label", `Seat ${seatNum}, taken`);
-      seat.disabled = true;
-    } else {
-      seat.setAttribute("aria-label", `Seat ${seatNum}, available`);
-
-      seat.addEventListener("click", () => {
-        if (seat.classList.contains("selected")) {
-          seat.classList.remove("selected");
-          selectedSeatsArray = selectedSeatsArray.filter(s => s !== seatNum);
-          seat.setAttribute("aria-pressed", "false");
-        } else {
-          seat.classList.add("selected");
-          selectedSeatsArray.push(seatNum);
-          seat.setAttribute("aria-pressed", "true");
-        }
-        // calc total price
-        const total = selectedSeatsArray.length * ticketPrice;
-        document.getElementById("totalPrice").textContent = `Total Price: $${total.toFixed(2)}`;
-
-        console.log("Ticket price:", ticketPrice);
-
-       console.log("Selected seats:", selectedSeatsArray);
-        console.log("Selected seats:", selectedSeatsArray);
-      });
-
-      seat.setAttribute("aria-pressed", "false");
-      seat.setAttribute("role", "button");
-    }
-    seatsGrid.appendChild(seat);
-  }
 }
 
+// get seats that are booked
 function loadTakenSeats(showtimeId) {
   const select = document.getElementById("showtimeSelect");
   const selectedOption = select.querySelector(`option[value="${showtimeId}"]`);
   const capacity = selectedOption && !isNaN(selectedOption.dataset.capacity)
     ? Number(selectedOption.dataset.capacity)
-    : 50; // fallback capacity
-console.log(`Using capacity ${capacity} for showtime ${showtimeId}`);
+    : 50; //default
 
-  axios.get("http://localhost/cinema_server/backend/controllers/show_takenseats.php", {
+  axios.get("http://localhost/cinema_server/backend/get_TakenSeats", {
     params: { showtime_id: showtimeId }
   })
   .then(res => {
@@ -168,52 +118,90 @@ console.log(`Using capacity ${capacity} for showtime ${showtimeId}`);
     console.error("Failed to load taken seats", err);
   });
 }
+//matrix of seats
+function renderSeats(takenSeats, capacity) {
+  const seatsGrid = document.getElementById("seats-grid");
+  seatsGrid.innerHTML = "";
+  const COLS = 10;
+  const ROWS = Math.ceil(capacity / COLS);
 
-document.querySelector('.ticket-button').addEventListener('click', () => {
+  for (let seatNum = 1; seatNum <= capacity; seatNum++) {
+    const seat = document.createElement("button");
+    seat.classList.add("seat");
+    seat.textContent = seatNum;
+
+    if (takenSeats.includes(seatNum)) {
+      seat.classList.add("taken");
+      seat.disabled = true;
+    } else {
+      seat.addEventListener("click", () => {
+        if (seat.classList.contains("selected")) {
+          seat.classList.remove("selected");
+          selectedSeatsArray = selectedSeatsArray.filter(s => s !== seatNum);
+        } else {
+          seat.classList.add("selected");
+          selectedSeatsArray.push(seatNum);
+        }
+        const total = selectedSeatsArray.length * ticketPrice;
+        document.getElementById("totalPrice").textContent = `Total Price: $${total.toFixed(2)}`;
+      });
+
+      seat.setAttribute("role", "button");
+      seat.setAttribute("aria-pressed", "false");
+    }
+
+    seatsGrid.appendChild(seat);
+  }
+}
+
+//  Buy ticket 
+document.querySelector(".ticket-button").addEventListener("click", () => {
   const userId = localStorage.getItem("userId");
   const quantity = selectedSeatsArray.length;
 
   if (!selectedShowtimeId || !userId || quantity === 0) {
-    alert("Missing user, showtime info or no seats selected!");
+    alert("Missing user, showtime, or no seats selected!");
     return;
   }
-axios.post("http://localhost/cinema_server/backend/controllers/buy_ticket.php", {
-  user_id: userId,
-  movie_id: movieId,
-  showtime_id: selectedShowtimeId,
-  seat_numbers: selectedSeatsArray,
-  quantity: selectedSeatsArray.length,
-}).then(res => {
+
+  axios.post("http://localhost/cinema_server/backend/Buy_Ticket", {
+    user_id: userId,
+    movie_id: movieId,
+    showtime_id: selectedShowtimeId,
+    seat_numbers: selectedSeatsArray,
+    quantity
+  })
+  .then(res => {
     if (res.data.success) {
       alert("Ticket purchased successfully");
+      // reflesh seats so newly bought seats show as taken
       loadTakenSeats(selectedShowtimeId);
+      selectedSeatsArray = [];
+      document.getElementById("totalPrice").textContent = `Total Price: $0.00`;
     } else {
       alert(res.data.message || "Purchase failed");
     }
-  }).catch(err => {
+  })
+  .catch(err => {
     console.error("Error:", err);
-    alert("Something went wrong");
+    alert("Something went wrong while purchasing.");
   });
 });
+
+// stars generate
 function generateStars(rating) {
   rating = Number(rating);
   if (isNaN(rating) || rating < 0) rating = 0;
   if (rating > 5) rating = 5;
-  const fullStars = Math.floor(rating);//we use it to see how many we have full stars
-  const halfStar = rating % 1 >= 0.5 ? 1 : 0;//check if the decimal part of the star is near to half star 
+
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5 ? 1 : 0;
   const emptyStars = 5 - fullStars - halfStar;
 
   let starsHTML = "";
-
-  for (let i = 0; i < fullStars; i++) {
-    starsHTML += `<i class="fas fa-star"></i>`;
-  }
-  if (halfStar) {
-    starsHTML += `<i class="fas fa-star-half-alt"></i>`;
-  }
-  for (let i = 0; i < emptyStars; i++) {
-    starsHTML += `<i class="far fa-star"></i>`;
-  }
+  for (let i = 0; i < fullStars; i++) starsHTML += `<i class="fas fa-star"></i>`;
+  if (halfStar) starsHTML += `<i class="fas fa-star-half-alt"></i>`;
+  for (let i = 0; i < emptyStars; i++) starsHTML += `<i class="far fa-star"></i>`;
 
   return starsHTML;
 }

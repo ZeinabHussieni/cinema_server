@@ -48,7 +48,7 @@ const dropdown = document.querySelector('.dropdown');
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const response = await axios.get("http://localhost/cinema_server/backend/controllers/get_movies.php");
+    const response = await axios.get("http://localhost/cinema_server/backend/get_Allmovies");
     console.log("Response data:", response.data);
     const movies = response.data.movies; 
     const Current = document.querySelectorAll(".current-movies")[0];

@@ -1,38 +1,41 @@
-lottie.loadAnimation({
-  container: document.getElementById('lottie-player'),
-  renderer: 'svg',
-  loop: true,
-  autoplay: true,
-  path: 'http://localhost/cinema_server/frontend/jsons/popcorn.json'  
-});
+//call user
 const userId = localStorage.getItem("userId");
 
 if (!userId) {
   alert("You must be logged in to order snacks.");
   throw new Error("User not logged in");
 }
-//first we have to define them
+//animation
+lottie.loadAnimation({
+  container: document.getElementById('lottie-player'),
+  renderer: 'svg',
+  loop: true,
+  autoplay: true,
+  path: 'http://localhost/cinema_server/frontend/jsons/popcorn.json'
+});
+//globals
 let selectedTicket = null;
 let snackMenu = [];
-let selectedSnacks = []; 
+let selectedSnacks = [];
 
-//get all tickets 
+//fetch tickets to know seats
 function fetchUserTickets() {
-  return axios.get("http://localhost/cinema_server/backend/controllers/get_usertickets.php", {
+  return axios.get("http://localhost/cinema_server/backend/get_UserTicket", {
     params: { user_id: userId }
   });
 }
-//get snack menu
+//menu for each showtime
 function fetchSnackMenu() {
-  return axios.get("http://localhost/cinema_server/backend/controllers/get_showtimesnacks.php");
+  return axios.get("http://localhost/cinema_server/backend/get_ShowtimeSnacks");
 }
-//get snack menu per showtime
+
 function fetchSnacksByShowtime(showtime_id) {
-  return axios.get("http://localhost/cinema_server/backend/controllers/get_showtimesnacks.php", {
+  return axios.get("http://localhost/cinema_server/backend/get_ShowtimeSnacks", {
     params: { showtime_id }
   });
 }
-//allow user to select which ticket he want 
+
+
 function renderUserTickets(tickets) {
   const container = document.getElementById("userTickets");
   container.innerHTML = "";
@@ -41,14 +44,13 @@ function renderUserTickets(tickets) {
     container.textContent = "You have no tickets yet, so no snacks to order.";
     return;
   }
+
   tickets.forEach(ticket => {
     const div = document.createElement("div");
     div.classList.add("ticket-item");
-    div.textContent = `${ticket.movie_title} |${new Date(ticket.show_datetime).toLocaleString()} | Seat: ${ticket.seat_number}`;
+    div.textContent = `${ticket.movie_title} | ${new Date(ticket.show_datetime).toLocaleString()} | Seat: ${ticket.seat_number}`;
     div.dataset.ticketId = ticket.ticket_id;
-    div.addEventListener("click", () => {
-      selectTicket(ticket);
-    });
+    div.addEventListener("click", () => selectTicket(ticket));
     container.appendChild(div);
   });
 }
@@ -58,7 +60,6 @@ function selectTicket(ticket) {
   document.getElementById("selectedTicketetinformations").textContent = 
     `Selected Ticket: ${ticket.movie_title} - Seat ${ticket.seat_number} at ${new Date(ticket.show_datetime).toLocaleString()}`;
 
-  // fetch snacks for the selected showtime only
   fetchSnacksByShowtime(ticket.showtime_id)
     .then(res => {
       const snacks = res.data.snacks || [];
@@ -70,7 +71,6 @@ function selectTicket(ticket) {
     });
 }
 
-//add as much snacks user want
 function renderSnackMenu(snacks) {
   const container = document.getElementById("snackMenuContainer");
   container.innerHTML = "";
@@ -88,23 +88,30 @@ function renderSnackMenu(snacks) {
       <input type="number" min="0" max="10" value="0" data-snack-id="${snack.id}" data-snack-price="${snack.price}" />
     `;
     container.appendChild(div);
-    
   });
-  // adding listeners to all inputs here to calculate
-  const inputs = container.querySelectorAll("input[type='number']");
-  inputs.forEach(input => {
+
+  container.querySelectorAll("input[type='number']").forEach(input => {
     input.addEventListener("input", updateTotalPrice);
   });
 
-  //reset total price when loading
   updateTotalPrice();
 }
 
-//here to collect snack selections from inputs
+function updateTotalPrice() {
+  const inputs = document.querySelectorAll("#snackMenuContainer input[type='number']");
+  let total = 0;
+  inputs.forEach(input => {
+    const quantity = parseInt(input.value) || 0;
+    const price = parseFloat(input.dataset.snackPrice) || 0;
+    total += quantity * price;
+  });
+  document.getElementById("totalPrice").textContent = `Total Price: $${total.toFixed(2)}`;
+}
+
+
 function getSelectedSnacks() {
   const inputs = document.querySelectorAll("#snackMenuContainer input[type='number']");
   selectedSnacks = [];
-
   inputs.forEach(input => {
     const qty = parseInt(input.value);
     if (qty > 0) {
@@ -117,34 +124,25 @@ function getSelectedSnacks() {
   });
 }
 
-//ordering 
 function submitSnackOrder() {
-  if (!selectedTicket) {
-    alert("Please select a ticket to deliver your snacks to.");
-    return;
-  }
+  if (!selectedTicket) return alert("Please select a ticket to deliver your snacks to.");
+
   getSelectedSnacks();
+  if (selectedSnacks.length === 0) return alert("Please select at least one snack to order.");
 
-  if (selectedSnacks.length === 0) {
-    alert("Please select at least one snack to order.");
-    return;
-  }
+  const orders = selectedSnacks.map(snack => axios.post("http://localhost/cinema_server/backend/Order_snack", {
+    user_id: userId,
+    ticket_id: selectedTicket.ticket_id,
+    movie_id: selectedTicket.movie_id,
+    showtime_id: selectedTicket.showtime_id,
+    seat_number: selectedTicket.seat_number,
+    snack_id: snack.snack_id,
+    quantity: snack.quantity,
+    price: snack.price * snack.quantity
+  }));
 
-  const order = selectedSnacks.map(snack => {
-    return axios.post("http://localhost/cinema_server/backend/controllers/order_snack.php", {
-      user_id: userId,
-      ticket_id: selectedTicket.ticket_id,
-      movie_id: selectedTicket.movie_id,
-      showtime_id: selectedTicket.showtime_id,
-      seat_number: selectedTicket.seat_number,
-      snack_id: snack.snack_id,
-      quantity: snack.quantity,
-      price: snack.price * snack.quantity
-    });
-  });
-
-  Promise.all(order)
-    .then(responses => {
+  Promise.all(orders)
+    .then(() => {
       alert("Snacks ordered successfully");
       resetSnackOrder();
     })
@@ -153,7 +151,7 @@ function submitSnackOrder() {
       alert("Failed to place snack order. Try again.");
     });
 }
-//then reset and load everything
+
 function resetSnackOrder() {
   selectedTicket = null;
   selectedSnacks = [];
@@ -162,6 +160,8 @@ function resetSnackOrder() {
   document.getElementById("snackMenuContainer").innerHTML = "";
   loadPageData();
 }
+
+
 function loadPageData() {
   Promise.all([fetchUserTickets(), fetchSnackMenu()])
     .then(([ticketsRes, snacksRes]) => {
@@ -174,19 +174,6 @@ function loadPageData() {
       alert("Failed to load your tickets or snacks.");
     });
 }
-// Event listener for order button
-document.getElementById("orderSnacksButton").addEventListener("click", submitSnackOrder);
 
-//loading data when script runs
+document.getElementById("orderSnacksButton").addEventListener("click", submitSnackOrder);
 loadPageData();
-//to calculate total price when getting data
-function updateTotalPrice() {
-  const inputs = document.querySelectorAll("#snackMenuContainer input[type='number']");
-  let total = 0;
-  inputs.forEach(input => {
-    const quantity = parseInt(input.value) || 0;
-    const price = parseFloat(input.dataset.snackPrice) || 0;
-    total += quantity * price;
-  });
-  document.getElementById("totalPrice").textContent = `Total Price: $${total.toFixed(2)}`;
-}
