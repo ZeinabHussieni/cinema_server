@@ -60,53 +60,80 @@ class User extends Model{
     public function setCommunicationPrefs(string $communicationPrefs){
         $this->communicationPrefs=$communicationPrefs;
     }
+
     public function toArray(){
         return [$this->id, $this->email,$this->phoneNumber,$this->password,$this->favoriteGenres,$this->paymentMethod,
                 $this->communicationPrefs];
     }
+
     public static function findByEmail(mysqli $mysqli, string $email) {
         $sql = sprintf("Select * FROM %s WHERE email = ?", static::$table);
         $query = $mysqli->prepare($sql);
+        
+        if(!$query){
+            throw new Exception("Prepare Failed: ".$mysqli->error);
+        }
+
         $query->bind_param("s", $email);
         $query->execute();
 
+        
+        if(!$query){
+            throw new Exception("Execute Failed: ".$mysqli->error);
+        }
+
         $result = $query->get_result();
-        $data = $result->fetch_assoc();
+        $data = $result->fetch_assoc(); //asgin it to assoc array to put in data object
 
         return $data ? new static($data) : null;
     }
 
-  public static function insertUser(mysqli $mysqli,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
-    $sql = sprintf("Insert into %s (email,phoneNumber,password,favoriteGenres,paymentMethod,communicationPrefs) values(?,?,?,?,?,?)", 
+
+    public static function insertUser(mysqli $mysqli,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
+     $sql = sprintf("Insert into %s (email,phoneNumber,password,favoriteGenres,paymentMethod,communicationPrefs) values(?,?,?,?,?,?)", 
                    static::$table);
                    
-    $query=$mysqli->prepare($sql);
+     $query=$mysqli->prepare($sql);
 
-    if(!$query) {
-    error_log("Prepare failed: " . $mysqli->error); 
-    return false;
+            
+     if(!$query){
+            throw new Exception("Prepare Failed: ".$mysqli->error);
      }
-    $hashed=password_hash($password,PASSWORD_DEFAULT);
-    $query->bind_param("ssssss",$email,$phoneNumber,$hashed,$favoriteGenres,$paymentMethod,$communicationPrefs);
-    $executed = $query->execute();
-    if (!$executed) {
-        error_log("Execute failed: " . $query->error);
-        return false;
+
+     $hashed=password_hash($password,PASSWORD_DEFAULT);
+     $query->bind_param("ssssss",$email,$phoneNumber,$hashed,$favoriteGenres,$paymentMethod,$communicationPrefs);
+     $executed = $query->execute();
+
+     if(!$executed){
+            throw new Exception("Execute Failed: ".$mysqli->error);
+     }
+
+     return $executed;
+
     }
-    return true;  
- }
-  public static function updateUser(mysqli $mysqli,int $id,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
-    $sql = sprintf("update %s SET email = ? ,phoneNumber =?, password=?, favoriteGenres=?,paymentMethod=?,communicationPrefs=? where id=?", 
+
+
+    public static function updateUser(mysqli $mysqli,int $id,string $email,string $phoneNumber,string $password,string $favoriteGenres,string $paymentMethod,string $communicationPrefs):bool {
+     $sql = sprintf("update %s SET email = ? ,phoneNumber =?, password=?, favoriteGenres=?,paymentMethod=?,communicationPrefs=? where id=?", 
                    static::$table);
                    
-    $query=$mysqli->prepare($sql);
+     $query=$mysqli->prepare($sql);
 
-    if(!$query) return false;
+                
+        if(!$query){
+            throw new Exception("Prepare Failed: ".$mysqli->error);
+        }
 
-    $hashed=password_hash($password,PASSWORD_DEFAULT);
+ 
+     $hashed= password_hash($password,PASSWORD_DEFAULT);
 
-    $query->bind_param("ssssssi",$email,$phoneNumber,$hashed,$favoriteGenres,$paymentMethod,$communicationPrefs,$id);
-   return $query->execute();
-   
- }
+     $query->bind_param("ssssssi",$email,$phoneNumber,$hashed,$favoriteGenres,$paymentMethod,$communicationPrefs,$id);
+     $executed= $query->execute();
+
+        if(!$executed){
+            throw new Exception("Execute Failed: ".$mysqli->error);
+        }
+       return $executed;
+    }
+
 }

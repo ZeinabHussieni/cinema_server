@@ -10,10 +10,10 @@ lottie.loadAnimation({
 document.addEventListener("DOMContentLoaded", () => {
   const loginbutton = document.querySelector(".login-button");
   const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password"); 
+  const passwordInput = document.getElementById("password");
 
   loginbutton.addEventListener("click", async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     const email = emailInput.value.trim();
     const password = passwordInput.value;
@@ -24,30 +24,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await axios.get("http://localhost/cinema_server/backend/controllers/get_users_byemail.php", {
-        params: {
-          email: email,
-          password: password
-        }
+      const response = await axios.get("http://localhost/cinema_server/backend/get_userbyemail", {
+        params: { email, password }
       });
 
-      if (response.data.user) {
-       const user = response.data.user; 
-       const userId = user[0];
-       const email = user[1];
-       const phoneNumber = user[2];
+      const user = response.data; 
+
+      if (user) {
+        const userId = user.id;
+        const userEmail = user.email;
 
         localStorage.setItem("userId", userId);
-        localStorage.setItem("email", email);
-       console.log("Saved userId in localStorage:", userId);
-        if (email === "ZeinabAdmin@gmail.com" && password === "Ah.2392002") {
-          localStorage.setItem("isAdmin", "true");
-        } else {
-          localStorage.setItem("isAdmin", "false");
-        }
-        window.location.href = "http://localhost/cinema_server/frontend/Pages/index.html"; 
+        localStorage.setItem("email", userEmail);
+
+        const isAdmin = (userEmail === "ZeinabAdmin@gmail.com" && password === "Ah.2392002");
+        localStorage.setItem("isAdmin", isAdmin ? "true" : "false");
+
+        window.location.href = "http://localhost/cinema_server/frontend/Pages/index.html";
       } else {
-        alert(response.data.message || "User not found.");
+        alert("User not found.");
       }
 
     } catch (error) {
@@ -56,5 +51,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-

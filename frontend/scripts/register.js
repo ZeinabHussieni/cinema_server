@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("favoriteGenres", favoriteGenres);
       formData.append("paymentMethod", paymentMethod);
       formData.append("communicationPrefs", communicationPrefs);
-      const response = await axios.post("http://localhost/cinema_server/backend/controllers/register_user.php", formData);
+      const response = await axios.post("http://localhost/cinema_server/backend/create_user", formData);
       console.log(response.data);
 
        if (response.data.status == 200 || response.data.status === "200")
